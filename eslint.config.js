@@ -27,10 +27,13 @@ export default [
 			parserOptions: {
 				ecmaFeatures: {
 					jsx: true
-				}
+				},
+				parser: '@typescript-eslint/parser'
 			}
 		},
 		rules: {
+			'@typescript-eslint/no-non-null-assertion': 'off',
+			'react/no-unescaped-entities': 'off',
 			'react-hooks/rules-of-hooks': 'error',
 			'react/react-in-jsx-scope': 'off',
 			'no-mixed-spaces-and-tabs': 0,

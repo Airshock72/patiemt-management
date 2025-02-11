@@ -14,7 +14,7 @@
     },
     "esModuleInterop": true,
     "importHelpers": true,
-    "module": "CommonJS",
+    "module": "ES2020",
     "rootDir": ".",
     "outDir": "./public/",
     "incremental": true,

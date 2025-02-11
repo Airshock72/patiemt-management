@@ -1,0 +1,77 @@
+{
+  "plugins": [
+    "react",
+    "react-hooks",
+    "sort-imports-es6-autofix"
+  ],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 2021,
+    "sourceType": "module"
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "env": {
+    "browser": true,
+    "node": true,
+    "es2021": true
+  },
+  "globals": {
+    "FB": true,
+    "gapi": true,
+    "google": true
+  },
+  "rules": {
+    "react-hooks/rules-of-hooks": "error",
+    "react/react-in-jsx-scope": "off",
+    "no-mixed-spaces-and-tabs": 0,
+    "react-hooks/exhaustive-deps": "warn",
+    "semi": ["error", "never", { "beforeStatementContinuationChars": "never"}],
+    "quotes": ["error", "single"],
+    "comma-dangle": ["error", {
+      "arrays": "never",
+      "objects": "never",
+      "imports": "never",
+      "exports": "never",
+      "functions": "never"
+    }],
+    "jsx-quotes": ["error", "prefer-single"],
+    "indent": ["error", "tab"],
+    "semi-style": ["error", "last"],
+    "no-trailing-spaces": "error",
+    "object-curly-spacing": ["error", "always"],
+    "sort-imports-es6-autofix/sort-imports-es6": [2, {
+      "ignoreCase": false,
+      "ignoreMemberSort": false,
+      "memberSyntaxSortOrder": ["none", "all", "multiple", "single"]
+    }],
+    "no-console": ["error", { "allow": ["warn", "error", "info"] }]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "extends": [
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
+      ],
+      "parser": "@typescript-eslint/parser",
+      "plugins": ["@typescript-eslint"],
+      "rules": {
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "react/no-unescaped-entities": "off",
+        "react-hooks/exhaustive-deps": "off"
+      }
+    }
+  ]
+}

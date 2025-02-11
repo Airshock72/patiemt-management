@@ -4,6 +4,7 @@ import { RouteType } from 'api/core'
 import LoginPage from 'src/modules/auth/login/views/IndexPage.tsx'
 import NotFound from 'src/modules/notFound/views/IndexPage.tsx'
 import { AuthProvider } from 'src/providers/AuthProvider.tsx'
+import PrivateLayout from 'src/layouts/PrivateLayout.tsx'
 
 const routesFromContext = (): Array<RouteType> => {
   const moduleRoutes: Array<RouteType> = []
@@ -22,9 +23,9 @@ const App = () => {
   return (
     <AuthProvider>
       <Routes>
-        {/*<Route element={<PrivateLayout />}>*/}
-        {/*	{routes.map((el, index) => <Route key={index} path={el.path} Component={el.element} />)}*/}
-        {/*</Route>*/}
+        <Route element={<PrivateLayout />}>
+          {routes.map((el, index) => <Route key={index} path={el.path} Component={el.element} />)}
+        </Route>
         <Route path={RoutePathTypes.LOGIN} element={<LoginPage />} />
         <Route path='*' element={<NotFound />} />
       </Routes>

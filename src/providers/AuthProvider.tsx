@@ -37,7 +37,7 @@ export const AuthProvider = ({ children } : { children: ReactNode }) => {
     dispatch({ type: 'SEND_AUTH_USER_REQUEST' })
     const response = await Auth.getAuthUser()
     dispatch ({ type: 'DONE_AUTH_USER_REQUEST', payload: response })
-    if (response !== null) localStorage.removeItem('token')
+    if (response === null) localStorage.removeItem('userData')
     if (redirectFrom) navigate(location.state?.from?.pathname || '/', { replace: true })
   }
 
@@ -57,7 +57,7 @@ export const AuthProvider = ({ children } : { children: ReactNode }) => {
 
   const signOut = async () => {
     dispatch({ type: 'SEND_DELETE_TOKEN' })
-    localStorage.removeItem('token')
+    localStorage.removeItem('userData')
     navigate('/login')
     dispatch({ type: 'DONE_DELETE_TOKEN' })
   }

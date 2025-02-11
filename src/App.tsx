@@ -1,12 +1,8 @@
-function App() {
 
-  return (
-    <>
-      <h1 className='text-3xl font-bold underline text-blue text'>
-        Hello world!
-      </h1>
-    </>
-  )
+const App = () => {
+	return (
+		<div className='bg-amber-300'>rame rume</div>
+	)
 }
 
 export default App

@@ -1,40 +1,8 @@
 {
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "core/*": [
-        "src/core/*"
-      ],
-      "api/*": [
-        "src/api/*"
-      ],
-      "src/*": [
-        "src/*"
-      ],
-    },
-    "esModuleInterop": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "importHelpers": true,
-    "jsx": "react-jsx",
-    "module": "CommonJS",
-    "rootDir": ".",
-    "outDir": "./public/",
-    "strict": true,
-    "lib": ["ESNext", "DOM"],
-    "noEmit": false,
-    "target": "es2021",
-    "skipLibCheck": true,
-    "isolatedModules": true,
-    "incremental": true,
-    "noImplicitReturns": true,
-    "noUncheckedIndexedAccess": true,
-    "noUnusedLocals": true,
-    "resolveJsonModule": true
-  },
-  "include": [
-    "src/**/*",
-    "node_modules/eslint-plugin-react/lib/types.d.ts"
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
   ],
-  "exclude": ["node_modules", "build", "src/assets"]
 }
+

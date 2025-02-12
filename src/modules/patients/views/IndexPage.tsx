@@ -60,7 +60,7 @@ const PatientPage = () => {
           </Col>
           <Col span={4}>
             <Form.Item name='personalNumber' label='Personal Number'>
-              <Input placeholder='პირადი ნომერი' />
+              <Input type='number' placeholder='პირადი ნომერი' />
             </Form.Item>
           </Col>
           <Col span={6}>

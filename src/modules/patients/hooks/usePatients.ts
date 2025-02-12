@@ -12,7 +12,7 @@ interface UsePatients {
 }
 
 interface UsePatientsProps {
-  form: FormInstance<FilterFormValues>;
+  form: FormInstance<FilterFormValues>
 }
 
 const usePatients = ({ form }: UsePatientsProps): UsePatients => {
@@ -33,8 +33,8 @@ const usePatients = ({ form }: UsePatientsProps): UsePatients => {
     const isAllFiltersEmpty = Object.values(filters).every(
       (value) =>
         value === undefined ||
-                value === '' ||
-                (Array.isArray(value) && value.length === 0)
+            value === '' ||
+            (Array.isArray(value) && value.length === 0)
     )
 
     if (isAllFiltersEmpty) {
@@ -42,19 +42,17 @@ const usePatients = ({ form }: UsePatientsProps): UsePatients => {
     }
 
     return patients.filter((patient) => {
-      return ((
-        !filters.firstName
-              || patient.firstName.includes(filters.firstName))
-          && (!filters.lastName
-              || patient.lastName.includes(filters.lastName))
-          && (!filters.personalNumber
-              || patient.personalNumber.includes(filters.personalNumber))
-          && (!filters.status
-              || patient.status === filters.status)
-          && (!filters.dateRange
-              || (dayjs(patient.addedDate).isAfter(filters.dateRange[0])
-                  && dayjs(patient.addedDate).isBefore(filters.dateRange[1])
-              ))
+      return (
+        (!filters.firstName ||
+              patient.firstName.toLowerCase().includes(filters.firstName.toLowerCase())) &&
+          (!filters.lastName ||
+              patient.lastName.toLowerCase().includes(filters.lastName.toLowerCase())) &&
+        (!filters.personalNumber ||
+            patient.personalNumber.includes(filters.personalNumber.toString())) &&
+          (!filters.status || patient.status === filters.status) &&
+          (!filters.dateRange ||
+              (dayjs(patient.addedDate).isAfter(filters.dateRange[0]) &&
+                  dayjs(patient.addedDate).isBefore(filters.dateRange[1])))
       )
     })
   }

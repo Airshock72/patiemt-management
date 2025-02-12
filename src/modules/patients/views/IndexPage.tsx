@@ -8,11 +8,16 @@ import { useAuth } from 'src/providers/AuthProvider.tsx'
 import { UserRole } from 'api/auth/types.ts'
 import { Patient } from 'api/patients/types.ts'
 import TableButton from 'src/modules/patients/views/TableButton.tsx'
+import { useNavigate } from 'react-router-dom'
 
 const PatientPage = () => {
-  const auth = useAuth()
+  const { getAuthUser } = useAuth()
+  const user = getAuthUser()
+  const isAdminOrDoctor = user?.roles.includes(UserRole.ADMIN) || user?.roles?.includes(UserRole.DOCTOR)
+  const isDoctor = user?.roles?.includes(UserRole.DOCTOR)
   const [form] = Form.useForm<FilterFormValues>()
   const { state, onFinish, handleDelete } = usePatients({ form })
+  const navigate = useNavigate()
 
   return (
     <div className='p-4'>
@@ -20,8 +25,7 @@ const PatientPage = () => {
       <Table
         columns={[
           ...columns,
-          ...(auth.state.data.user?.roles?.includes(UserRole.ADMIN) ||
-             auth.state.data.user?.roles?.includes(UserRole.DOCTOR)
+          ...(isAdminOrDoctor
             ? [
               {
                 title: 'რედაქტირება',
@@ -59,15 +63,12 @@ const PatientPage = () => {
             <span className='font-bold py-5 align-middle'>
              პაციენტების სია
             </span>
-            {auth.state.data.user?.roles?.includes(UserRole.DOCTOR) &&
+            {isDoctor &&
                 <Button
                   type='primary'
                   className='align-middle'
                   icon={<PlusOutlined />}
-                  onClick={() => {
-                    // Add your logic to handle adding a new patient here
-                    console.log('Add new patient')
-                  }}
+                  onClick={() => navigate('/patients/create')}
                 >
                   პაციენტის დამატება
                 </Button>}

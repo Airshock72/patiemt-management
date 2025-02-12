@@ -8,9 +8,6 @@ export interface AuthStore {
     readonly isRevoking: boolean
 }
 
-export type SEND_AUTH_USER_REQUEST = 'SEND_AUTH_USER_REQUEST'
-export type DONE_AUTH_USER_REQUEST = 'DONE_AUTH_USER_REQUEST'
-
 export type SEND_TOKEN_REQUEST = 'SEND_TOKEN_REQUEST'
 export type DONE_TOKEN_REQUEST = 'DONE_TOKEN_REQUEST'
 
@@ -18,8 +15,6 @@ export type SEND_DELETE_TOKEN = 'SEND_DELETE_TOKEN'
 export type DONE_DELETE_TOKEN = 'DONE_DELETE_TOKEN'
 
 export type AuthActions =
-    | { type: SEND_AUTH_USER_REQUEST }
-    | { type: DONE_AUTH_USER_REQUEST, readonly payload: AuthenticatedUser | null }
     | { type: SEND_DELETE_TOKEN }
     | { type: DONE_DELETE_TOKEN }
     | { type: SEND_TOKEN_REQUEST }
@@ -38,20 +33,6 @@ export const useAuthReducer = (): [AuthStore, Dispatch<AuthActions>] => {
 
 export const authReducer = (state: AuthStore, action: AuthActions): AuthStore => {
   switch (action.type) {
-  case 'SEND_AUTH_USER_REQUEST':
-    return {
-      ...state,
-      isFetchingUser: true
-    }
-  case 'DONE_AUTH_USER_REQUEST':
-    return {
-      ...state,
-      data: {
-        ...state.data,
-        user: action.payload ? action.payload : state.data.user
-      },
-      isFetchingUser: false
-    }
   case 'SEND_DELETE_TOKEN':
     return {
       ...state,

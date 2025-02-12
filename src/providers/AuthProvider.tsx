@@ -3,20 +3,20 @@ import { Auth } from '../api'
 import { createContext, ReactNode, useContext } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { AuthStore, initialAuthState, useAuthReducer } from 'src/stores/useAuthReducer.ts'
-import { TokenData } from 'api/auth/types.ts'
+import { AuthenticatedUser, TokenData } from 'api/auth/types.ts'
 
 export interface AuthContextType {
     state: AuthStore
     signin: (value: LoginFormValue) => void
     signOut: () => void
-    getAuthUser: () => void
+    getAuthUser: () => AuthenticatedUser | null
 }
 
 const initialAuthContext: AuthContextType = {
   state: initialAuthState,
   signin: async () => ({}),
   signOut: () => ({}),
-  getAuthUser: async () => ({})
+  getAuthUser: () => null
 }
 
 export const AuthContext = createContext<AuthContextType>(initialAuthContext)
@@ -30,12 +30,16 @@ export const AuthProvider = ({ children } : { children: ReactNode }) => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const getAuthUser = async (redirectFrom = false) => {
-    dispatch({ type: 'SEND_AUTH_USER_REQUEST' })
-    const response = await Auth.getAuthUser()
-    dispatch ({ type: 'DONE_AUTH_USER_REQUEST', payload: response })
-    if (response === null) localStorage.removeItem('userData')
+  const getAuthUser = (redirectFrom = false) => {
+    const userData = localStorage.getItem('userData')
+    if (userData === null) return null
+    const parsedUserData = JSON.parse(userData)
     if (redirectFrom) navigate(location.state?.from?.pathname || '/', { replace: true })
+    return {
+      id: parsedUserData.id,
+      username: parsedUserData.username,
+      roles: parsedUserData.roles
+    }
   }
 
   const signin = async (value: LoginFormValue) => {
@@ -44,7 +48,7 @@ export const AuthProvider = ({ children } : { children: ReactNode }) => {
     dispatch({ type: 'DONE_TOKEN_REQUEST', payload: response })
     if (response.data !== null) {
       localStorage.setItem('userData', JSON.stringify(response.data))
-      if (response.data) getAuthUser(true).then()
+      if (response.data) getAuthUser(true)
     }
   }
 

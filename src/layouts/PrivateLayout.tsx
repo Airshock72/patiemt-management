@@ -10,8 +10,8 @@ const PrivateLayout = (): ReactNode => {
   const navigate = useNavigate()
   useEffect(() => {
     const checkAuthUser =  () => {
-      auth.getAuthUser()
-      if (auth.state.data.user === null)  navigate('/login')
+      const user = auth.getAuthUser()
+      if (user=== null) navigate('/login')
     }
     checkAuthUser()
   }, [])

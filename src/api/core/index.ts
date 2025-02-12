@@ -6,7 +6,3 @@ export type RouteType = {
   readonly isPublic: boolean
   readonly element: ComponentType
 }
-
-export type RouteModule = {
-  default: Array<RouteType>
-}

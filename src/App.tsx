@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router-dom'
-import { RoutePathTypes } from 'api/types/apiGlobalTypes.ts'
 import { RouteType } from 'api/core'
 import LoginPage from 'src/modules/auth/login/views/IndexPage.tsx'
 import NotFound from 'src/modules/notFound/views/IndexPage.tsx'
@@ -26,7 +25,7 @@ const App = () => {
         <Route element={<PrivateLayout />}>
           {routes.map((el, index) => <Route key={index} path={el.path} Component={el.element} />)}
         </Route>
-        <Route path={RoutePathTypes.LOGIN} element={<LoginPage />} />
+        <Route path='/login' element={<LoginPage />} />
         <Route path='*' element={<NotFound />} />
       </Routes>
     </AuthProvider>

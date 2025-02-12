@@ -1,13 +1,4 @@
-export enum RoutePathTypes {
-  HOME = '/',
-  LOGIN = '/login',
-  SIGNUP = '/signup'
-}
-
 export enum ResponseStatuses {
-  UNEXPECTED = 1,
-  SUCCESS = 200,
-  CREATED = 201,
   UNAUTHENTICATED = 401,
   NOT_FOUND = 404,
   METHOD_NOT_ALLOWED = 405,
@@ -20,9 +11,3 @@ export enum ResponseStatuses {
 }
 
 export type ID = string
-
-export interface GlobalResponse {
-  content: unknown | null
-  status: ResponseStatuses
-  errors: Array<Error> | null
-}

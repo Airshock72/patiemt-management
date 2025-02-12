@@ -1,7 +1,6 @@
 import { Layout, Menu, Typography, Dropdown, Space, MenuProps } from 'antd'
 import {
   TeamOutlined,
-  PlusCircleOutlined,
   LogoutOutlined,
   MenuOutlined
 } from '@ant-design/icons'
@@ -15,7 +14,6 @@ const AppHeader = () => {
   const navigate = useNavigate()
   const { signOut } = useAuth()
   const location = useLocation()
-  const role = 'doctor'
 
   const menuItems = [
     {
@@ -23,15 +21,6 @@ const AppHeader = () => {
       label: 'პაციენტები',
       icon: <TeamOutlined />
     },
-    ...(role === 'doctor'
-      ? [
-        {
-          key: 'add-patient',
-          label: 'პაციენტის დამატება',
-          icon: <PlusCircleOutlined />
-        }
-      ]
-      : []),
     {
       key: 'logout',
       label: 'გამოსვლა',

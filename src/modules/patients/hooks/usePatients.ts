@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 import { FilterFormValues } from 'src/modules/patients/types'
 import dayjs from 'dayjs'
-import { FormInstance } from 'antd'
+import { FormInstance, Modal } from 'antd'
 import { PatientsStore, usePatientsReducer } from 'src/modules/patients/store/patients.ts'
 import { PatientsApi } from '../../../api'
 import { Patient } from 'api/patients/types.ts'
 
 interface UsePatients {
-  state: PatientsStore;
-  onFinish: (values: FilterFormValues) => void;
+  state: PatientsStore
+  onFinish: (values: FilterFormValues) => void
+  handleDelete: (record: Patient) => void
 }
 
 interface UsePatientsProps {
@@ -24,6 +25,21 @@ const usePatients = ({ form }: UsePatientsProps): UsePatients => {
     const patients = PatientsApi.getPatients()
     const filteredPatients = applyFilters(patients, filters)
     dispatch({ type: 'DONE_PATIENTS_REQUEST', payload: filteredPatients })
+  }
+
+  const handleDelete = (record: Patient) => {
+    Modal.confirm({
+      title: 'დარწმუნებული ხართ რომ წაშალოთ ეს ჩანაწერი?',
+      content: 'პროცესს უკან ვერ დააბრუნებთ.',
+      okText: 'დიახ',
+      okType: 'danger',
+      cancelText: 'არა',
+      onOk() { onDelete(record.key) }
+    })
+  }
+
+  const onDelete = (key: string) => {
+    dispatch({ type: 'DELETE_PATIENT', payload: key })
   }
 
   const applyFilters = (
@@ -87,7 +103,7 @@ const usePatients = ({ form }: UsePatientsProps): UsePatients => {
     }
   }, [form])
 
-  return { state, onFinish }
+  return { state, onFinish, handleDelete }
 }
 
 export default usePatients

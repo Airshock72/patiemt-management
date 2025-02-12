@@ -3,6 +3,11 @@ import { Patient, PatientStatus } from 'api/patients/types.ts'
 
 export const columns: ColumnsType<Patient> = [
   {
+    title: '#',
+    key: 'index',
+    render: (_, __, index) => index + 1
+  },
+  {
     title: 'სახელი',
     dataIndex: 'firstName',
     key: 'firstName'

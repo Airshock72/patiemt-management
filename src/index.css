@@ -5,3 +5,14 @@
 .page-not-found-background {
     background-image: url("https://preview.keenthemes.com/metronic8/demo9/assets/media/auth/bg1.jpg");
 }
+
+.delete-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+    cursor: pointer;
+}

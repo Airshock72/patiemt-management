@@ -7,9 +7,10 @@ import {
   Input,
   Row,
   Select,
-  Table,
+  Table, Tooltip,
   Typography
 } from 'antd'
+import { DeleteOutlined } from '@ant-design/icons'
 import { FilterFormValues } from 'src/modules/patients/types'
 import usePatients from 'src/modules/patients/hooks/usePatients.ts'
 import { columns, tablePagination } from 'src/modules/patients/helpers'
@@ -20,12 +21,12 @@ const { Title } = Typography
 
 const PatientPage = () => {
   const [form] = Form.useForm<FilterFormValues>()
-  const { state, onFinish } = usePatients({ form })
+  const { state, onFinish, handleDelete } = usePatients({ form })
 
   return (
     <div className='p-4'>
       <Title level={4} className='mb-4'>
-                ფილტრი
+        ფილტრი
       </Title>
       <Form form={form} onFinish={onFinish} layout='vertical'>
         <Row gutter={16} align='middle'>
@@ -71,7 +72,22 @@ const PatientPage = () => {
       <Divider className='my-14' />
 
       <Table
-        columns={columns}
+        columns={[...columns,
+          {
+            title: 'წაშლა',
+            key: 'action',
+            render: (_, record) => (
+              <Tooltip title='წაშლა' placement='top'>
+                <Button
+                  type='link'
+                  danger
+                  onClick={() => handleDelete(record)}
+                  icon={<DeleteOutlined />}
+                  className='delete-button'
+                />
+              </Tooltip>
+            )
+          }]}
         dataSource={state.data}
         rowKey='key'
         pagination={tablePagination}

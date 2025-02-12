@@ -13,7 +13,6 @@ const PrivateLayout = (): ReactNode => {
       auth.getAuthUser()
       if (auth.state.data.user === null)  navigate('/login')
     }
-
     checkAuthUser()
   }, [])
   return (

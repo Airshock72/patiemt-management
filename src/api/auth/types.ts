@@ -13,12 +13,16 @@ export interface Token {
 export interface AuthenticatedUser {
     readonly id: ID | null
     readonly username: string
-    readonly isAdmin: boolean
-    readonly email: string
+    readonly roles: Array<UserRole>
 }
 
 export interface AuthUserData {
     readonly data: AuthenticatedUser | null
     readonly errors: Array<Error> | null
     readonly status: ResponseStatuses
+}
+
+export enum UserRole {
+    ADMIN = 1,
+    DOCTOR = 2
 }

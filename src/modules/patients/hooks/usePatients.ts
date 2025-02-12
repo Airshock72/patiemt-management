@@ -49,7 +49,7 @@ const usePatients = ({ form }: UsePatientsProps): UsePatients => {
               patient.lastName.toLowerCase().includes(filters.lastName.toLowerCase())) &&
         (!filters.personalNumber ||
             patient.personalNumber.includes(filters.personalNumber.toString())) &&
-          (!filters.status || patient.status === filters.status) &&
+          (!filters.status || patient.status === Number(filters.status)) &&
           (!filters.dateRange ||
               (dayjs(patient.addedDate).isAfter(filters.dateRange[0]) &&
                   dayjs(patient.addedDate).isBefore(filters.dateRange[1])))

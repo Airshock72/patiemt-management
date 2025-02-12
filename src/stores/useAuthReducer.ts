@@ -1,12 +1,8 @@
-import { AuthenticatedUser, Token, TokenData } from 'api/auth/types'
+import { AuthenticatedUser, TokenData } from 'api/auth/types'
 import { Dispatch, useReducer } from 'react'
-import { SignUpUserFormValues } from 'src/modules/auth/signup/types'
 
 export interface AuthStore {
-    readonly data: {
-        user: AuthenticatedUser | null
-        token: Token | null
-    }
+    readonly data: { user: AuthenticatedUser | null }
     readonly isFetchingUser: boolean
     readonly isFetchingToken: boolean
     readonly isRevoking: boolean
@@ -21,8 +17,6 @@ export type DONE_TOKEN_REQUEST = 'DONE_TOKEN_REQUEST'
 export type SEND_DELETE_TOKEN = 'SEND_DELETE_TOKEN'
 export type DONE_DELETE_TOKEN = 'DONE_DELETE_TOKEN'
 
-export type SET_USER_VALUES = 'SET_USER_VALUES'
-
 export type AuthActions =
     | { type: SEND_AUTH_USER_REQUEST }
     | { type: DONE_AUTH_USER_REQUEST, readonly payload: AuthenticatedUser | null }
@@ -30,23 +24,12 @@ export type AuthActions =
     | { type: DONE_DELETE_TOKEN }
     | { type: SEND_TOKEN_REQUEST }
     | { type: DONE_TOKEN_REQUEST, readonly payload: TokenData }
-    | { type: SET_USER_VALUES, readonly payload: SignUpUserFormValues }
 
 export const initialAuthState: AuthStore = {
-  data: {
-    user: null,
-    token: null
-  },
+  data: { user: null },
   isFetchingUser: true,
   isFetchingToken: false,
   isRevoking: false
-}
-
-export const initialAuthenticatedUser: AuthenticatedUser = {
-  id: null,
-  isAdmin: false,
-  username: '',
-  email: ''
 }
 
 export const useAuthReducer = (): [AuthStore, Dispatch<AuthActions>] => {
@@ -89,23 +72,9 @@ export const authReducer = (state: AuthStore, action: AuthActions): AuthStore =>
       ...state,
       data: {
         ...state.data,
-        token: action.payload.data
+        user: action.payload.data
       },
       isFetchingToken: false
-    }
-  case 'SET_USER_VALUES':
-    return {
-      ...state,
-      data: {
-        ...state.data,
-        user: {
-          ...state.data.user,
-          email: action.payload.email,
-          isAdmin: false,
-          username: action.payload.username,
-          id: Date.now() + '-' + Math.floor(Math.random() * 10000)
-        }
-      }
     }
   default:
     return state

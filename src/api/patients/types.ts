@@ -4,5 +4,10 @@ export interface Patient {
     lastName: string
     personalNumber: string
     addedDate: string
-    status: string
+    status: PatientStatus
+}
+
+export enum PatientStatus {
+    ACTIVE = 1,
+    INACTIVE = 2
 }

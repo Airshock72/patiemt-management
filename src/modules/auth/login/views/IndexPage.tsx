@@ -1,16 +1,18 @@
-import { Button, Form, Input } from 'antd'
+import { Button, Checkbox, Form, Input } from 'antd'
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons'
-import { LoginFormValue } from 'src/modules/auth/login/types'
 import { useAuth } from 'src/providers/AuthProvider.tsx'
 import { Navigate } from 'react-router-dom'
+import { LoginFormValue } from 'src/modules/auth/login/types'
+import { UserRole } from 'api/auth/types.ts'
 
 const LoginPage = () => {
   const auth = useAuth()
   const [form] = Form.useForm()
 
-  const onFinish = (values: LoginFormValue) => auth.signin(values)
+  const onFinish = (values: LoginFormValue) =>  auth.signin(values)
 
   if (localStorage.getItem('userData') !== null) return <Navigate to='/' />
+
   return (
     <div className='flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-400 via-purple-500 to-pink-600'>
       <div className='w-full max-w-md p-8 bg-white rounded-lg shadow-2xl'>
@@ -34,12 +36,22 @@ const LoginPage = () => {
               }
             />
           </Form.Item>
+          <Form.Item label='შედი სისტემაში როგორც' className='!mt-3'>
+            <Form.Item name='roles' valuePropName='value' noStyle>
+              <Checkbox.Group>
+                <div className='flex gap-4'>
+                  <Checkbox value={UserRole.ADMIN}>ადმინი</Checkbox>
+                  <Checkbox value={UserRole.DOCTOR}>ექიმი</Checkbox>
+                </div>
+              </Checkbox.Group>
+            </Form.Item>
+          </Form.Item>
           <Form.Item className='flex justify-center !mt-15'>
             <Button
               type='primary'
               htmlType='submit'
               className='w-full bg-blue-500 hover:bg-blue-600'>
-				შესვლა
+                შესვლა
             </Button>
           </Form.Item>
         </Form>

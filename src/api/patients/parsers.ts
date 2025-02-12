@@ -1,4 +1,4 @@
-import { Patient } from 'api/patients/types.ts'
+import { Patient, PatientStatus } from 'api/patients/types.ts'
 
 export const parsePatients = (): Array<Patient> => {
   return [
@@ -8,7 +8,7 @@ export const parsePatients = (): Array<Patient> => {
       lastName: 'Doe',
       personalNumber: '123456789',
       addedDate: '2021-05-15',
-      status: 'Active'
+      status: PatientStatus.ACTIVE
     },
     {
       key: '2',
@@ -16,7 +16,7 @@ export const parsePatients = (): Array<Patient> => {
       lastName: 'Smith',
       personalNumber: '987654321',
       addedDate: '2022-03-10',
-      status: 'Inactive'
+      status: PatientStatus.INACTIVE
     },
     {
       key: '3',
@@ -24,7 +24,7 @@ export const parsePatients = (): Array<Patient> => {
       lastName: 'Smith',
       personalNumber: '26443746352',
       addedDate: '2025-01-12',
-      status: 'Inactive'
+      status: PatientStatus.ACTIVE
     },
     {
       key: '4',
@@ -32,7 +32,7 @@ export const parsePatients = (): Array<Patient> => {
       lastName: 'James',
       personalNumber: '9887876543',
       addedDate: '2025-01-12',
-      status: 'Active'
+      status: PatientStatus.INACTIVE
     },
     {
       key: '5',
@@ -40,7 +40,7 @@ export const parsePatients = (): Array<Patient> => {
       lastName: 'Xochipilli',
       personalNumber: '23456543456',
       addedDate: '2025-10-05',
-      status: 'Inactive'
+      status: PatientStatus.INACTIVE
     },
     {
       key: '6',
@@ -48,7 +48,7 @@ export const parsePatients = (): Array<Patient> => {
       lastName: 'Philomel',
       personalNumber: '98767656543',
       addedDate: '2026-11-04',
-      status: 'Active'
+      status: PatientStatus.ACTIVE
     }
   ]
 }

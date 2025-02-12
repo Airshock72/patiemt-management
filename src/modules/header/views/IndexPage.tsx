@@ -1,6 +1,5 @@
 import { Layout, Menu, Typography, Dropdown, Space, MenuProps } from 'antd'
 import {
-  UserOutlined,
   TeamOutlined,
   PlusCircleOutlined,
   LogoutOutlined,
@@ -33,11 +32,6 @@ const AppHeader = () => {
         }
       ]
       : []),
-    {
-      key: 'profile',
-      label: 'პროფილი',
-      icon: <UserOutlined />
-    },
     {
       key: 'logout',
       label: 'გამოსვლა',

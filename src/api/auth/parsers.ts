@@ -2,9 +2,6 @@ import { LoginFormValue } from 'src/modules/auth/login/types'
 import { AuthenticatedUser, TokenData } from 'api/auth/types.ts'
 
 export const parseAuth = (response: LoginFormValue): TokenData => {
-  const randomName = Math.random().toString(36).substring(2, 10)
-  const randomDomain = Math.random().toString(36).substring(2, 6)
-
   const randomString = Math.random().toString(36).substring(2, 18) // Random string with a length of 16 characters
   const timestamp = Date.now().toString(36) // Timestamp in base 36
 
@@ -13,9 +10,8 @@ export const parseAuth = (response: LoginFormValue): TokenData => {
       accessToken: `${randomString}-${timestamp}`,
       refreshToken: `${randomString}-${timestamp}`,
       username: response.username,
-      email: `${randomName}@${randomDomain}.com`,
-      isAdmin: false,
-      id: Date.now() + '-' + Math.floor(Math.random() * 10000)
+      id: Date.now() + '-' + Math.floor(Math.random() * 10000),
+      roles: response.roles
     }
   }
 }
@@ -26,8 +22,7 @@ export const parseAuthUser = (): AuthenticatedUser | null => {
   const parsedUserData = JSON.parse(userData)
   return {
     id: parsedUserData.id,
-    isAdmin: parsedUserData.isAdmin,
-    email: parsedUserData.email,
-    username: parsedUserData.email
+    username: parsedUserData.username,
+    roles: parsedUserData.roles
   }
 }

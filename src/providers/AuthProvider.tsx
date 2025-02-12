@@ -1,6 +1,5 @@
 import { LoginFormValue } from 'src/modules/auth/login/types'
 import { Auth } from '../api'
-import { SignUpUserFormValues } from 'src/modules/auth/signup/types'
 import { createContext, ReactNode, useContext } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { AuthStore, initialAuthState, useAuthReducer } from 'src/stores/useAuthReducer.ts'
@@ -11,15 +10,13 @@ export interface AuthContextType {
     signin: (value: LoginFormValue) => void
     signOut: () => void
     getAuthUser: () => void
-    setUser: (values: SignUpUserFormValues) => void
 }
 
 const initialAuthContext: AuthContextType = {
   state: initialAuthState,
   signin: async () => ({}),
   signOut: () => ({}),
-  getAuthUser: async () => ({}),
-  setUser: (initialRegisterUser) => (console.error(initialRegisterUser))
+  getAuthUser: async () => ({})
 }
 
 export const AuthContext = createContext<AuthContextType>(initialAuthContext)
@@ -41,10 +38,6 @@ export const AuthProvider = ({ children } : { children: ReactNode }) => {
     if (redirectFrom) navigate(location.state?.from?.pathname || '/', { replace: true })
   }
 
-  const setUser = async (values: SignUpUserFormValues) => {
-    dispatch({ type: 'SET_USER_VALUES', payload: values })
-  }
-
   const signin = async (value: LoginFormValue) => {
     dispatch({ type: 'SEND_TOKEN_REQUEST' })
     const response: TokenData = await Auth.logIn(value)
@@ -62,7 +55,7 @@ export const AuthProvider = ({ children } : { children: ReactNode }) => {
     dispatch({ type: 'DONE_DELETE_TOKEN' })
   }
 
-  const value: AuthContextType = { state, getAuthUser, signOut, signin, setUser }
+  const value: AuthContextType = { state, getAuthUser, signOut, signin }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }

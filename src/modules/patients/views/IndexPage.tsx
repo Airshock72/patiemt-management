@@ -92,7 +92,11 @@ const PatientPage = () => {
         columns={columns}
         dataSource={state.data}
         rowKey='key'
-        pagination={{ pageSize: 5 }}
+        pagination={{
+          pageSizeOptions: ['2', '5', '10', '20', '50'],
+          showSizeChanger: true,
+          defaultPageSize: 5
+        }}
         loading={state.isFetching}
       />
     </div>

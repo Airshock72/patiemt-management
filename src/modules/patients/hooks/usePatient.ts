@@ -3,20 +3,12 @@ import { PatientsApi } from 'src/api'
 import { useNavigate } from 'react-router-dom'
 import { PatientStore, usePatientReducer } from 'src/modules/patients/store/patient.ts'
 import { ID } from 'api/types/apiGlobalTypes.ts'
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 interface UsePatient {
   state: PatientStore
   createPatient: (values: PatientFormValues) => void
   updatePatient: (values: PatientFormValues, patientId: ID) => void
-  setIsModalVisible: Dispatch<SetStateAction<boolean>>
-  setIsOtpValidated: Dispatch<SetStateAction<boolean>>
-  setIsFormDirty: Dispatch<SetStateAction<boolean>>
-  setPhoneNumber: Dispatch<SetStateAction<string>>
-  isModalVisible: boolean
-  isOtpValidated: boolean
-  phoneNumber: string
-  isFormDirty: boolean
 }
 
 interface UsePatientProps {
@@ -27,10 +19,7 @@ interface UsePatientProps {
 const usePatient = ({ id, isDoctor }: UsePatientProps): UsePatient => {
   const [state, dispatch] = usePatientReducer()
   const navigate = useNavigate()
-  const [isModalVisible, setIsModalVisible] = useState(false)
-  const [isOtpValidated, setIsOtpValidated] = useState(false)
-  const [phoneNumber, setPhoneNumber] = useState('')
-  const [isFormDirty, setIsFormDirty] = useState(false)
+
 
   const getPatient = (patientId: ID) => {
     dispatch({ type: 'SEND_PATIENT_REQUEST' })
@@ -59,15 +48,7 @@ const usePatient = ({ id, isDoctor }: UsePatientProps): UsePatient => {
   return {
     state,
     createPatient,
-    updatePatient ,
-    isFormDirty,
-    isModalVisible,
-    isOtpValidated,
-    phoneNumber,
-    setIsFormDirty,
-    setIsModalVisible,
-    setIsOtpValidated,
-    setPhoneNumber
+    updatePatient
   }
 }
 

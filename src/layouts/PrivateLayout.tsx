@@ -16,7 +16,7 @@ const PrivateLayout = (): ReactNode => {
     checkAuthUser()
   }, [])
   return (
-    <Layout className='min-h-screen flex flex-col h-full'>
+    <Layout className='!min-h-screen flex flex-col h-full'>
       <AppHeader />
       <Content className='flex-1 p-4 mb-20'>
         <Outlet />

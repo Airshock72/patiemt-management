@@ -23,67 +23,67 @@ export const parsePatients = (): Array<Patient> => {
       country: null,
       gender: null,
       phone: null
+    },
+    {
+      key: '2',
+      firstName: 'Jane',
+      lastName: 'Smith',
+      personalNumber: '987654321',
+      addedDate: '2022-03-10',
+      birthDate: '2022-03-10',
+      status: PatientStatus.INACTIVE,
+      country: null,
+      gender: null,
+      phone: null
+    },
+    {
+      key: '3',
+      firstName: 'Ana',
+      lastName: 'Smith',
+      personalNumber: '26443746352',
+      addedDate: '2025-01-12',
+      birthDate: '2025-01-12',
+      status: PatientStatus.ACTIVE,
+      country: null,
+      gender: null,
+      phone: null
+    },
+    {
+      key: '4',
+      firstName: 'Bella',
+      lastName: 'James',
+      personalNumber: '9887876543',
+      addedDate: '2025-01-12',
+      birthDate: '2025-01-12',
+      status: PatientStatus.INACTIVE,
+      country: null,
+      gender: null,
+      phone: null
+    },
+    {
+      key: '5',
+      firstName: 'Luanna',
+      lastName: 'Xochipilli',
+      personalNumber: '23456543456',
+      addedDate: '2025-10-05',
+      birthDate: '2025-10-05',
+      status: PatientStatus.INACTIVE,
+      country: null,
+      gender: null,
+      phone: null
+    },
+    {
+      key: '6',
+      firstName: 'Akmal',
+      lastName: 'Philomel',
+      personalNumber: '98767656543',
+      addedDate: '2026-11-04',
+      birthDate: '2026-11-04',
+      status: PatientStatus.ACTIVE,
+      country: null,
+      gender: null,
+      phone: null
     }
-    // {
-    //   key: '2',
-    //   firstName: 'Jane',
-    //   lastName: 'Smith',
-    //   personalNumber: '987654321',
-    //   addedDate: '2022-03-10',
-    //   birthDate: '2022-03-10',
-    //   status: PatientStatus.INACTIVE,
-    //   country: null,
-    //   gender: null,
-    //   phone: null
-    // },
-    // {
-    //   key: '3',
-    //   firstName: 'Ana',
-    //   lastName: 'Smith',
-    //   personalNumber: '26443746352',
-    //   addedDate: '2025-01-12',
-    //   birthDate: '2025-01-12',
-    //   status: PatientStatus.ACTIVE,
-    //   country: null,
-    //   gender: null,
-    //   phone: null
-    // },
-    // {
-    //   key: '4',
-    //   firstName: 'Bella',
-    //   lastName: 'James',
-    //   personalNumber: '9887876543',
-    //   addedDate: '2025-01-12',
-    //   birthDate: '2025-01-12',
-    //   status: PatientStatus.INACTIVE,
-    //   country: null,
-    //   gender: null,
-    //   phone: null
-    // },
-    // {
-    //   key: '5',
-    //   firstName: 'Luanna',
-    //   lastName: 'Xochipilli',
-    //   personalNumber: '23456543456',
-    //   addedDate: '2025-10-05',
-    //   birthDate: '2025-10-05',
-    //   status: PatientStatus.INACTIVE,
-    //   country: null,
-    //   gender: null,
-    //   phone: null
-    // },
-    // {
-    //   key: '6',
-    //   firstName: 'Akmal',
-    //   lastName: 'Philomel',
-    //   personalNumber: '98767656543',
-    //   addedDate: '2026-11-04',
-    //   birthDate: '2026-11-04',
-    //   status: PatientStatus.ACTIVE,
-    //   country: null,
-    //   gender: null,
-    //   phone: null
-    // }
   ]
   localStorage.setItem('patients', JSON.stringify(staticPatients))
   return staticPatients

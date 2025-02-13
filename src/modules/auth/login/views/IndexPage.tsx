@@ -14,7 +14,7 @@ const LoginPage = () => {
   if (localStorage.getItem('userData') !== null) return <Navigate to='/' />
 
   return (
-    <div className='flex items-center justify-center min-h-screen bg-gradient-to-r from-blue-400 via-purple-500 to-pink-600'>
+    <div className='flex items-center justify-center !min-h-screen bg-gradient-to-r from-blue-400 via-purple-500 to-pink-600'>
       <div className='w-full max-w-md p-8 bg-white rounded-lg shadow-2xl'>
         <h1 className='text-2xl font-bold text-center mb-6'>ავტორიზაცია</h1>
         <Form form={form} onFinish={onFinish} layout='vertical'>

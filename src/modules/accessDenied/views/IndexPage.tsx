@@ -9,7 +9,7 @@ const AccessDenied = () => {
   const navigate = useNavigate()
 
   return (
-    <div className='flex flex-col items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat page-not-found-background'>
+    <div className='flex flex-col items-center justify-center !min-h-screen bg-cover bg-center bg-no-repeat page-not-found-background'>
       <Card className='w-[800px] p-6 shadow-xl bg-white bg-opacity-80'>
         <Title level={1} className='text-3xl text-gray-900 text-center mb-4'>
             თქვენ არ გაქვთ მინიჭებული ნებართვა ამ მოქმედების შესასრულებლად!

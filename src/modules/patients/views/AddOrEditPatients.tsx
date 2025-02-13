@@ -1,20 +1,35 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button, DatePicker, Form, Input, Tabs, TabsProps, Select, Modal } from 'antd'
 import { PatientFormValues } from 'api/patients/types.ts'
 import usePatient from 'src/modules/patients/hooks/usePatient.ts'
+import { useParams } from 'react-router-dom'
 
 const { Option } = Select
 
 const AddOrEditPatients = () => {
   const [form] = Form.useForm()
+  const params = useParams()
+  const patientId = params.id
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [otpForm] = Form.useForm()
   const [isOtpValidated, setIsOtpValidated] = useState(false)
   const [phoneNumber, setPhoneNumber] = useState('')
-  const hook = usePatient()
+  const [isFormDirty, setIsFormDirty] = useState(false)
+  const hook = usePatient({ id: patientId })
+
+  useEffect(() => {
+    if (hook.state.data && patientId) {
+      form.setFieldsValue(hook.state.data)
+    }
+  }, [hook.state.data, patientId, form])
+
+  useEffect(() => {
+    const unsubscribe = form.isFieldsTouched()
+    setIsFormDirty(unsubscribe)
+  }, [form])
 
   const onFinish = (values: PatientFormValues) => {
-    if (!isOtpValidated) {
+    if (!isOtpValidated && !patientId) {
       form.setFields([
         {
           name: 'phone',
@@ -23,7 +38,7 @@ const AddOrEditPatients = () => {
       ])
       return
     }
-    hook.createPatient(values)
+    return patientId ? hook.updatePatient(values, patientId) : hook.createPatient(values)
   }
 
   const handleSendCode = () => {
@@ -131,8 +146,13 @@ const AddOrEditPatients = () => {
     <div className='p-4'>
       <Tabs defaultActiveKey='1' items={items} />
       <div className='mt-4'>
-        <Button type='primary' htmlType='submit' onClick={() => form.submit()}>
-            პაციენტის შენახვა
+        <Button
+          type='primary'
+          htmlType='submit'
+          onClick={() => form.submit()}
+          disabled={patientId ? !isFormDirty : false}
+        >
+            პაციენტის {patientId ? 'განახლება' : 'შენახვა'}
         </Button>
       </div>
       <Modal

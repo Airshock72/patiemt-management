@@ -35,7 +35,7 @@ const PatientPage = () => {
                 render: (_: unknown, record: Patient) => (
                   <TableButton
                     title='რედაქტირება'
-                    handleClick={() => console.log(record)}
+                    handleClick={() => navigate(`/patients/${record.key}/edit`)}
                     icon={<EditOutlined />}
                   />
                 )

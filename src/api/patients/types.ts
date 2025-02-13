@@ -7,6 +7,7 @@ export interface Patient {
     lastName: string
     personalNumber: string
     addedDate: string
+    birthDate: string
     status: PatientStatus
     gender: string | null
     phone: string | null

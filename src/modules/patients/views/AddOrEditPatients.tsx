@@ -20,8 +20,14 @@ const AddOrEditPatients = () => {
   useEffect(() => {
     if (hook.state.data && patientId) {
       form.setFieldsValue(hook.state.data)
+      setIsFormDirty(false)
     }
   }, [hook.state.data, patientId, form])
+
+  const onFieldsChange = () => {
+    const fieldsTouched = form.isFieldsTouched()
+    setIsFormDirty(fieldsTouched)
+  }
 
   useEffect(() => {
     const unsubscribe = form.isFieldsTouched()
@@ -66,7 +72,7 @@ const AddOrEditPatients = () => {
       key: '1',
       label: 'პაციენტის პირადი ინფორმაცია',
       children: (
-        <Form form={form} onFinish={onFinish} layout='vertical'>
+        <Form form={form} onFinish={onFinish} layout='vertical' onFieldsChange={onFieldsChange}>
           <Form.Item
             label='სახელი'
             name='firstName'

@@ -80,6 +80,15 @@ export const parsePatients = (): Array<Patient> => {
   return staticPatients
 }
 
+export const parseDeletePatient = (key: string): Array<Patient> => {
+  const patients = localStorage.getItem('patients')
+  if (patients === null) return []
+  const parsedPatients: Array<Patient> = JSON.parse(patients)
+  const filteredPatients = parsedPatients.filter(el => el.key !== key)
+  localStorage.setItem('patients', JSON.stringify(filteredPatients))
+  return filteredPatients
+}
+
 export const parsePatient = (values: PatientFormValues): PatientFormValues => {
   const patientData = {
     country: values.country,

@@ -39,7 +39,8 @@ const usePatients = ({ form }: UsePatientsProps): UsePatients => {
   }
 
   const onDelete = (key: string) => {
-    dispatch({ type: 'DELETE_PATIENT', payload: key })
+    const patients = PatientsApi.deletePatient(key)
+    dispatch({ type: 'DELETE_PATIENT', payload: patients })
   }
 
   const applyFilters = (

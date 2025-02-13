@@ -20,7 +20,7 @@ export type PatientsActions =
     | { type: 'DONE_PATIENTS_REQUEST', readonly payload: Array<Patient> | null }
     | { type: 'SEND_FILTERED_PATIENTS_UPDATE', readonly payload: Array<Patient> }
     | { type: 'SET_FILTERED_PATIENTS', readonly payload: Array<Patient> }
-    | { type: 'DELETE_PATIENT', readonly payload: string }
+    | { type: 'DELETE_PATIENT', readonly payload: Array<Patient> }
 
 const initialPatients: PatientsStore = {
   data: [],
@@ -57,7 +57,7 @@ export const patientsReducer = (state: PatientsStore, action: PatientsActions): 
   case 'DELETE_PATIENT':
     return {
       ...state,
-      data: state.data.filter(el => el.key !== action.payload)
+      data: action.payload
     }
   default:
     return state

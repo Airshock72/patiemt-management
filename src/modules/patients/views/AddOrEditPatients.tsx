@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, DatePicker, Form, Input, Tabs, TabsProps, Select, Modal } from 'antd'
+import { Button, DatePicker, Form, Input, Tabs, TabsProps, Select, Modal, Row, Col } from 'antd'
 import { PatientFormValues } from 'api/patients/types.ts'
 import usePatient from 'src/modules/patients/hooks/usePatient.ts'
 import { useParams } from 'react-router-dom'
@@ -73,76 +73,94 @@ const AddOrEditPatients = () => {
       label: 'პაციენტის პირადი ინფორმაცია',
       children: (
         <Form form={form} onFinish={onFinish} layout='vertical' onFieldsChange={onFieldsChange}>
-          <Form.Item
-            label='სახელი'
-            name='firstName'
-            rules={[{ required: true, message: 'გთხოვთ შეიყვანოთ სახელი!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label='გვარი'
-            name='lastName'
-            rules={[{ required: true, message: 'გთხოვთ შეიყვანოთ გვარი!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            label='დაბადების თარიღი'
-            name='dob'
-            rules={[{ required: true, message: 'გთხოვთ შეიყვანოთ დაბადების თარიღი!' }]}
-          >
-            <DatePicker style={{ width: '100%' }} />
-          </Form.Item>
-          <Form.Item
-            label='ქვეყანა'
-            name='country'
-            rules={[{ required: true, message: 'გთხოვთ შეიყვანოთ ქვეყნის დასახელება!' }]}
-          >
-            <Select>
-              <Option value='Georgia'>საქართველო</Option>
-              <Option value='USA'>აშშ</Option>
-              <Option value='Canada'>კანადა</Option>
-              <Option value='UK'>დიდი ბრიტანეთი</Option>
-              <Option value='Australia'>ავსტრალია</Option>
-            </Select>
-          </Form.Item>
-          <Form.Item
-            label='სქესი'
-            name='gender'
-            rules={[{ required: true, message: 'გთხოვთ აირჩიოთ სქესი!' }]}
-          >
-            <Select>
-              <Option value='male'>მამრობითი</Option>
-              <Option value='female'>მდედრობითი</Option>
-              <Option value='other'>სხვა</Option>
-            </Select>
-          </Form.Item>
-          <Form.Item
-            label='ტელეფონის ნომერი'
-            name='phone'
-            rules={[
-              { required: true, message: 'გთხოვთ შეიყვანოთ ტელეფონის ნომერი!' },
-              {
-                pattern: /^\d{9}$/,
-                message: 'ტელეფონის ნომერი უნდა შედგებოდეს 9 ციფრისგან!'
-              }
-            ]}
-          >
-            <Input
-              type='number'
-              onChange={e => setPhoneNumber(e.target.value)}
-              addonAfter={
-                <Button
-                  type='link'
-                  onClick={handleSendCode}
-                  disabled={phoneNumber.length !== 9}
-                >
-                   კოდის გაგზავნა
-                </Button>
-              }
-            />
-          </Form.Item>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                label='სახელი'
+                name='firstName'
+                rules={[{ required: true, message: 'გთხოვთ შეიყვანოთ სახელი!' }]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label='გვარი'
+                name='lastName'
+                rules={[{ required: true, message: 'გთხოვთ შეიყვანოთ გვარი!' }]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                label='დაბადების თარიღი'
+                name='dob'
+                rules={[{ required: true, message: 'გთხოვთ შეიყვანოთ დაბადების თარიღი!' }]}
+              >
+                <DatePicker style={{ width: '100%' }} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label='ქვეყანა'
+                name='country'
+                rules={[{ required: true, message: 'გთხოვთ შეიყვანოთ ქვეყნის დასახელება!' }]}
+              >
+                <Select>
+                  <Option value='Georgia'>საქართველო</Option>
+                  <Option value='USA'>აშშ</Option>
+                  <Option value='Canada'>კანადა</Option>
+                  <Option value='UK'>დიდი ბრიტანეთი</Option>
+                  <Option value='Australia'>ავსტრალია</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                label='სქესი'
+                name='gender'
+                rules={[{ required: true, message: 'გთხოვთ აირჩიოთ სქესი!' }]}
+              >
+                <Select>
+                  <Option value='male'>მამრობითი</Option>
+                  <Option value='female'>მდედრობითი</Option>
+                  <Option value='other'>სხვა</Option>
+                </Select>
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label='ტელეფონის ნომერი'
+                name='phone'
+                rules={[
+                  { required: true, message: 'გთხოვთ შეიყვანოთ ტელეფონის ნომერი!' },
+                  {
+                    pattern: /^\d{9}$/,
+                    message: 'ტელეფონის ნომერი უნდა შედგებოდეს 9 ციფრისგან!'
+                  }
+                ]}
+              >
+                <Input
+                  type='number'
+                  onChange={e => setPhoneNumber(e.target.value)}
+                  addonAfter={
+                    <Button
+                      type='link'
+                      onClick={handleSendCode}
+                      disabled={phoneNumber.length !== 9}
+                    >
+                                            კოდის გაგზავნა
+                    </Button>
+                  }
+                />
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       )
     }
@@ -158,7 +176,7 @@ const AddOrEditPatients = () => {
           onClick={() => form.submit()}
           disabled={patientId ? !isFormDirty : false}
         >
-            პაციენტის {patientId ? 'განახლება' : 'შენახვა'}
+                    პაციენტის {patientId ? 'განახლება' : 'შენახვა'}
         </Button>
       </div>
       <Modal
@@ -179,7 +197,7 @@ const AddOrEditPatients = () => {
               }
             ]}
           >
-            <Input />
+            <Input type='number' />
           </Form.Item>
         </Form>
       </Modal>

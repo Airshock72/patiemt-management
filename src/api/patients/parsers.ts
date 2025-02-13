@@ -1,4 +1,4 @@
-import { Patient, PatientStatus } from 'api/patients/types.ts'
+import { Patient, PatientFormValues, PatientStatus } from 'api/patients/types.ts'
 
 export const parsePatients = (): Array<Patient> => {
   return [
@@ -51,4 +51,16 @@ export const parsePatients = (): Array<Patient> => {
       status: PatientStatus.ACTIVE
     }
   ]
+}
+
+export const parsePatient = (values: PatientFormValues): PatientFormValues => {
+  return {
+    country: values.country,
+    gender: values.gender,
+    lastName: values.lastName,
+    firstName: values.firstName,
+    id: Date.now() + '-' + Math.floor(Math.random() * 10000),
+    dob: values.dob,
+    phone: values.phone
+  }
 }

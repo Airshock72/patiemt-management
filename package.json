@@ -13,6 +13,8 @@
   "dependencies": {
     "@ant-design/v5-patch-for-react-19": "^1.0.3",
     "antd": "^5.24.0",
+    "date-fns": "^4.1.0",
+    "dayjs": "^1.11.13",
     "prettier": "^3.5.0",
     "qs": "^6.14.0",
     "react": "^19.0.0",

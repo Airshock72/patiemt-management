@@ -38,8 +38,10 @@ export const AuthProvider = ({ children } : { children: ReactNode }) => {
     return {
       id: parsedUserData.id,
       username: parsedUserData.username,
-      roles: parsedUserData.roles
-    }
+      roles: parsedUserData.roles,
+      clinicName: parsedUserData.clinicName,
+      avatar: parsedUserData.avatar
+    } as AuthenticatedUser | null
   }
 
   const signin = async (value: LoginFormValue) => {

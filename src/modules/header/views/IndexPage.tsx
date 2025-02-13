@@ -1,18 +1,30 @@
-import { Layout, Menu, Typography, Dropdown, Space, MenuProps } from 'antd'
 import {
-  TeamOutlined,
+  Avatar,
+  Dropdown,
+  Layout,
+  Menu,
+  MenuProps,
+  Space,
+  Typography
+} from 'antd'
+import {
   LogoutOutlined,
-  MenuOutlined
+  MenuOutlined,
+  TeamOutlined,
+  UserOutlined
 } from '@ant-design/icons'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from 'src/providers/AuthProvider.tsx'
+import { UserRole } from 'api/auth/types.ts'
 
 const { Header } = Layout
-const { Title } = Typography
+const { Title, Text } = Typography
 
 const AppHeader = () => {
   const navigate = useNavigate()
-  const { signOut } = useAuth()
+  const { signOut, getAuthUser } = useAuth()
+  const user = getAuthUser()
+  const isDoctor = user?.roles === undefined ? false : user.roles.includes(UserRole.DOCTOR)
   const location = useLocation()
 
   const menuItems = [
@@ -47,39 +59,64 @@ const AppHeader = () => {
     }
   }
 
-  const selectedKey = location.pathname === '/' ? 'patients' : location.pathname.split('/')[1] || ''
+  const selectedKey =
+        location.pathname === '/'
+          ? 'patients'
+          : location.pathname.split('/')[1] || ''
 
   return (
     <Header className='flex justify-between items-center bg-white shadow-sm'>
-      {/* Logo or App Name */}
       <Title level={4} className='mb-0 !text-amber-100'>
-        პაციენტების მენეჯმენტი
+                პაციენტების მენეჯმენტი
       </Title>
+      <div className='flex items-center gap-4'>
+        {user && (
+          <div className='flex items-center gap-2 mr-10'>
+            <Avatar
+              icon={<UserOutlined />}
+              src={user.avatar}
+              className='bg-blue-500'
+            />
+            <div className='flex flex-col'>
+              <Text strong className='!text-white'>
+                {user.username}
+              </Text>
+              {isDoctor && (
+                <Text
+                  type='secondary'
+                  className='text-xs !text-amber-100'
+                >
+                  {user.clinicName}
+                </Text>
+              )}
+            </div>
+          </div>
+        )}
+        <div className='hidden md:block'>
+          <Menu
+            mode='horizontal'
+            className='border-0'
+            items={menuItems}
+            onClick={handleMenuClick}
+            selectedKeys={[selectedKey]}
+          />
+        </div>
 
-      {/* Desktop Menu */}
-      <div className='hidden md:block'>
-        <Menu
-          mode='horizontal'
-          className='border-0'
-          items={menuItems}
-          onClick={handleMenuClick}
-          selectedKeys={[selectedKey]}
-        />
-      </div>
-
-      <div className='block md:hidden'>
-        <Dropdown
-          menu={{
-            items: menuItems,
-            onClick: handleMenuClick,
-            selectedKeys: [selectedKey]
-          }}
-          trigger={['click']}
-        >
-          <Space>
-            <MenuOutlined className='text-xl' />
-          </Space>
-        </Dropdown>
+        {/* Mobile Menu */}
+        <div className='block md:hidden'>
+          <Dropdown
+            menu={{
+              items: menuItems,
+              onClick: handleMenuClick,
+              selectedKeys: [selectedKey]
+            }}
+            trigger={['click']}
+          >
+            <Space>
+              <MenuOutlined className='text-xl' />
+            </Space>
+          </Dropdown>
+        </div>
       </div>
     </Header>
   )

@@ -14,6 +14,8 @@ export interface AuthenticatedUser {
     readonly id: ID | null
     readonly username: string
     readonly roles: Array<UserRole>
+    readonly avatar: string
+    readonly clinicName?: string
 }
 
 export enum UserRole {

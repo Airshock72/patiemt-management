@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Button, DatePicker, Form, Input, Tabs, TabsProps, Select, Modal, Row, Col, notification  } from 'antd'
 import { PatientFormValues } from 'api/patients/types.ts'
 import usePatient from 'src/modules/patients/hooks/usePatient.ts'
 import { useParams } from 'react-router-dom'
+import { useAuth } from 'src/providers/AuthProvider.tsx'
+import { UserRole } from 'api/auth/types.ts'
 
 const { Option } = Select
 
@@ -10,19 +12,30 @@ const AddOrEditPatients = () => {
   const [form] = Form.useForm()
   const params = useParams()
   const patientId = params.id
-  const [isModalVisible, setIsModalVisible] = useState(false)
   const [otpForm] = Form.useForm()
-  const [isOtpValidated, setIsOtpValidated] = useState(false)
-  const [phoneNumber, setPhoneNumber] = useState('')
-  const [isFormDirty, setIsFormDirty] = useState(false)
-  const hook = usePatient({ id: patientId })
+  const { getAuthUser } = useAuth()
+  const user = getAuthUser()
+  const isDoctor = user && user.roles === undefined ? false : user?.roles.includes(UserRole.DOCTOR)
+  const {
+    setIsFormDirty,
+    state,
+    isOtpValidated,
+    createPatient,
+    updatePatient,
+    setIsOtpValidated,
+    setIsModalVisible,
+    setPhoneNumber,
+    phoneNumber,
+    isFormDirty,
+    isModalVisible
+  } = usePatient({ id: patientId, isDoctor })
 
   useEffect(() => {
-    if (hook.state.data && patientId) {
-      form.setFieldsValue(hook.state.data)
+    if (state.data && patientId) {
+      form.setFieldsValue(state.data)
       setIsFormDirty(false)
     }
-  }, [hook.state.data, patientId, form])
+  }, [state.data, patientId, form])
 
   const onFieldsChange = () => {
     const fieldsTouched = form.isFieldsTouched()
@@ -52,7 +65,7 @@ const AddOrEditPatients = () => {
         color: '#389e0d'
       }
     })
-    return patientId ? hook.updatePatient(values, patientId) : hook.createPatient(values)
+    return patientId ? updatePatient(values, patientId) : createPatient(values)
   }
 
   const handleSendCode = () => {
@@ -184,7 +197,7 @@ const AddOrEditPatients = () => {
           onClick={() => form.submit()}
           disabled={patientId ? !isFormDirty : false}
         >
-                    პაციენტის {patientId ? 'განახლება' : 'შენახვა'}
+          პაციენტის {patientId ? 'განახლება' : 'შენახვა'}
         </Button>
       </div>
       <Modal

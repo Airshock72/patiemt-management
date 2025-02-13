@@ -9,9 +9,9 @@ const PrivateLayout = (): ReactNode => {
   const auth = useAuth()
   const navigate = useNavigate()
   useEffect(() => {
-    const checkAuthUser =  () => {
+    const checkAuthUser = () => {
       const user = auth.getAuthUser()
-      if (user=== null) navigate('/login')
+      if (user === null) navigate('/login')
     }
     checkAuthUser()
   }, [])
@@ -22,7 +22,8 @@ const PrivateLayout = (): ReactNode => {
         <Outlet />
       </Content>
       <Footer className='text-center bg-white border-t border-gray-200 py-4 fixed bottom-0 w-full'>
-          © {new Date().getFullYear()} ჯანდაცვის სამინისტრო. ყველა უფლება დაცულია
+                © {new Date().getFullYear()} ჯანდაცვის სამინისტრო. ყველა უფლება
+                დაცულია
       </Footer>
     </Layout>
   )

@@ -18,7 +18,7 @@ const PrivateLayout = (): ReactNode => {
   return (
     <Layout className='min-h-screen flex flex-col h-full'>
       <AppHeader />
-      <Content className='flex-1 p-4 overflow-auto'>
+      <Content className='flex-1 p-4 mb-20'>
         <Outlet />
       </Content>
       <Footer className='text-center bg-white border-t border-gray-200 py-4 fixed bottom-0 w-full'>

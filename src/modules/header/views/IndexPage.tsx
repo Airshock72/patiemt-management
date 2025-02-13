@@ -102,7 +102,6 @@ const AppHeader = () => {
           />
         </div>
 
-        {/* Mobile Menu */}
         <div className='block md:hidden'>
           <Dropdown
             menu={{

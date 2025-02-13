@@ -57,6 +57,8 @@ export const AuthProvider = ({ children } : { children: ReactNode }) => {
   const signOut = async () => {
     dispatch({ type: 'SEND_DELETE_TOKEN' })
     localStorage.removeItem('userData')
+    localStorage.removeItem('patientFilters')
+    localStorage.removeItem('patients')
     navigate('/login')
     dispatch({ type: 'DONE_DELETE_TOKEN' })
   }

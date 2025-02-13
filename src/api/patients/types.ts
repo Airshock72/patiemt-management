@@ -8,6 +8,9 @@ export interface Patient {
     personalNumber: string
     addedDate: string
     status: PatientStatus
+    gender: string | null
+    phone: string | null
+    country: string | null
 }
 
 export enum PatientStatus {

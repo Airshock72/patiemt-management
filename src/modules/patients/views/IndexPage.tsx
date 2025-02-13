@@ -14,8 +14,8 @@ const PatientPage = () => {
   const { getAuthUser } = useAuth()
   const user = getAuthUser()
   const isAdminOrDoctor = user && user.roles === undefined
-    ? false :  user?.roles.includes(UserRole.ADMIN)
-      || user?.roles?.includes(UserRole.DOCTOR)
+    ? false
+    : user?.roles.includes(UserRole.ADMIN) || user?.roles?.includes(UserRole.DOCTOR)
   const isDoctor = user && user.roles === undefined ? false : user?.roles.includes(UserRole.DOCTOR)
   const [form] = Form.useForm<FilterFormValues>()
   const { state, onFinish, handleDelete } = usePatients({ form })

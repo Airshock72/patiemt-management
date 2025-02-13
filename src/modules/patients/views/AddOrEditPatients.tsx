@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, DatePicker, Form, Input, Tabs, TabsProps, Select, Modal, Row, Col } from 'antd'
+import { Button, DatePicker, Form, Input, Tabs, TabsProps, Select, Modal, Row, Col, notification  } from 'antd'
 import { PatientFormValues } from 'api/patients/types.ts'
 import usePatient from 'src/modules/patients/hooks/usePatient.ts'
 import { useParams } from 'react-router-dom'
@@ -44,6 +44,14 @@ const AddOrEditPatients = () => {
       ])
       return
     }
+    notification.success({
+      message: `პაციენტის მონაცემები ${patientId ? 'განახლდა' : 'შეინახა '} წარმატებით!`,
+      style: {
+        backgroundColor: '#f6ffed',
+        border: '1px solid #b7eb8f',
+        color: '#389e0d'
+      }
+    })
     return patientId ? hook.updatePatient(values, patientId) : hook.createPatient(values)
   }
 

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { FilterFormValues } from 'src/modules/patients/types'
 import dayjs from 'dayjs'
-import { FormInstance, Modal } from 'antd'
+import { FormInstance, Modal, notification } from 'antd'
 import { PatientsStore, usePatientsReducer } from 'src/modules/patients/store/patients.ts'
 import { PatientsApi } from '../../../api'
 import { Patient } from 'api/patients/types.ts'
@@ -41,6 +41,14 @@ const usePatients = ({ form }: UsePatientsProps): UsePatients => {
   const onDelete = (key: string) => {
     const patients = PatientsApi.deletePatient(key)
     dispatch({ type: 'DELETE_PATIENT', payload: patients })
+    notification.success({
+      message: 'პაციენტის მონაცემები წაიშალა წარმატებით!',
+      style: {
+        backgroundColor: '#f6ffed',
+        border: '1px solid #b7eb8f',
+        color: '#389e0d'
+      }
+    })
   }
 
   const applyFilters = (

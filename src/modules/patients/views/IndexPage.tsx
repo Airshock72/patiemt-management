@@ -2,7 +2,7 @@ import { Button, Form, Table } from 'antd'
 import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons'
 import { FilterFormValues } from 'src/modules/patients/types'
 import usePatients from 'src/modules/patients/hooks/usePatients.ts'
-import { columns, tablePagination } from 'src/modules/patients/helpers'
+import { patientColumns, tablePagination } from 'src/modules/patients/helpers'
 import Filters from 'src/modules/patients/views/Filters.tsx'
 import { useAuth } from 'src/providers/AuthProvider.tsx'
 import { UserRole } from 'api/auth/types.ts'
@@ -26,7 +26,7 @@ const PatientPage = () => {
       <Filters form={form} onFinish={onFinish} />
       <Table
         columns={[
-          ...columns,
+          ...patientColumns,
           ...(isAdminOrDoctor
             ? [
               {

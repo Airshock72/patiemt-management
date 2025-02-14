@@ -1,5 +1,7 @@
 import {
-  Patient, PatientConditionFormValues,
+  FinancialRegistry,
+  Patient,
+  PatientConditionFormValues,
   PatientFormValues,
   PatientStatus
 } from 'api/patients/types.ts'
@@ -8,6 +10,7 @@ import { ID } from 'api/types/apiGlobalTypes.ts'
 import { initialPatient } from 'src/modules/patients/store/patient.ts'
 import dayjs, { Dayjs } from 'dayjs'
 import { initialPatientCondition } from 'src/modules/patients/store/patientCondition.ts'
+import { initialFinancialRegistry } from 'src/modules/patients/store/financialRegistry.ts'
 
 export const parsePatients = (): Array<Patient> => {
   const patients = localStorage.getItem('patients')
@@ -25,7 +28,8 @@ export const parsePatients = (): Array<Patient> => {
       gender: null,
       phone: null,
       disease: null,
-      symptoms: []
+      symptoms: [],
+      financialRegistry: []
     },
     {
       key: '2',
@@ -39,7 +43,8 @@ export const parsePatients = (): Array<Patient> => {
       gender: null,
       phone: null,
       disease: null,
-      symptoms: []
+      symptoms: [],
+      financialRegistry: []
     },
     {
       key: '3',
@@ -53,7 +58,8 @@ export const parsePatients = (): Array<Patient> => {
       gender: null,
       phone: null,
       disease: null,
-      symptoms: []
+      symptoms: [],
+      financialRegistry: []
     },
     {
       key: '4',
@@ -67,7 +73,8 @@ export const parsePatients = (): Array<Patient> => {
       gender: null,
       phone: null,
       disease: null,
-      symptoms: []
+      symptoms: [],
+      financialRegistry: []
     },
     {
       key: '5',
@@ -81,7 +88,8 @@ export const parsePatients = (): Array<Patient> => {
       gender: null,
       phone: null,
       disease: null,
-      symptoms: []
+      symptoms: [],
+      financialRegistry: []
     },
     {
       key: '6',
@@ -95,7 +103,8 @@ export const parsePatients = (): Array<Patient> => {
       gender: null,
       phone: null,
       disease: null,
-      symptoms: []
+      symptoms: [],
+      financialRegistry: []
     }
   ]
   localStorage.setItem('patients', JSON.stringify(staticPatients))
@@ -134,7 +143,8 @@ export const parseCreatePatientPersonalInfo = (values: PatientFormValues): Patie
       : '',
     addedDate: new Date().toISOString().split('T')[0] as string,
     disease: null,
-    symptoms: []
+    symptoms: [],
+    financialRegistry: []
   })
 
   localStorage.setItem('patients', JSON.stringify(parsedPatients))
@@ -169,6 +179,71 @@ export const parseGetPatientCondition = (patientId: ID): PatientConditionFormVal
     disease: foundItem.disease,
     symptoms: foundItem.symptoms.map(symptom => ({ ...symptom, date: dayjs(symptom.date) }))
   }
+}
+
+export const parseFinancialRegistry = (patientId: ID): Array<FinancialRegistry> => {
+  const patients = localStorage.getItem('patients')
+  if (patients === null) return initialFinancialRegistry
+  const parsedPatients: Array<Patient> = JSON.parse(patients)
+  const foundItem = parsedPatients.find((el) => el.key === patientId)
+  if (!foundItem) return initialFinancialRegistry
+
+  const financialRegistryData: Array<FinancialRegistry> = [
+    {
+      key: '1',
+      service: 'კონსულტაცია',
+      date: '2023-10-01',
+      amount: '100 ₾'
+    },
+    {
+      key: '2',
+      service: 'ლაბორატორიული ტესტი',
+      date: '2023-10-02',
+      amount: '200 ₾'
+    },
+    {
+      key: '3',
+      service: 'X-Ray',
+      date: '2023-10-03',
+      amount: '150 ₾'
+    },
+    {
+      key: '4',
+      service: 'სისხლის ტესტი',
+      date: '2023-10-04',
+      amount: '50 ₾'
+    },
+    {
+      key: '5',
+      service: 'MRI სკანერი',
+      date: '2023-10-05',
+      amount: '500 ₾'
+    },
+    {
+      key: '6',
+      service: 'ფიზიოთერაპია',
+      date: '2023-10-06',
+      amount: '80 ₾'
+    },
+    {
+      key: '7',
+      service: 'ოპერაცია',
+      date: '2023-10-07',
+      amount: '1000₾'
+    }
+  ]
+
+  const updatedPatient: Patient = {
+    ...foundItem,
+    key: patientId,
+    financialRegistry: financialRegistryData
+  }
+
+  parsedPatients.splice(parsedPatients.indexOf(foundItem), 1, updatedPatient)
+
+  localStorage.setItem('patients', JSON.stringify(parsedPatients))
+
+  return financialRegistryData
 }
 
 export const parseUpdatePatientPersonalInfo = (values: PatientFormValues, patientId: ID): PatientFormValues => {
@@ -231,7 +306,6 @@ export const parseUpdatePatientCondition = (values: PatientConditionFormValues, 
   const updatedPatient: Patient = {
     ...foundItem,
     key: patientId,
-    personalNumber: foundItem.personalNumber,
     symptoms: patientConditionFormValue.symptoms,
     disease: patientConditionFormValue.disease
   }

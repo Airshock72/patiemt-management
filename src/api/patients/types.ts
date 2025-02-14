@@ -14,6 +14,7 @@ export interface Patient {
     country: string | null
     disease: string | null
     symptoms: Array<Symptom>
+    financialRegistry: Array<FinancialRegistry>
 }
 
 interface Symptom {
@@ -41,6 +42,13 @@ export interface PatientFormValues {
 export interface PatientConditionFormValues {
    readonly disease: string | null
    readonly symptoms: Array<Symptom>
+}
+
+export interface FinancialRegistry {
+    readonly key: string
+    readonly service: string
+    readonly date: string
+    readonly amount: string
 }
 
 export enum PatientTabs {

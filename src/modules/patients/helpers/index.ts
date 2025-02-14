@@ -1,7 +1,7 @@
 import type { ColumnsType } from 'antd/es/table'
-import { Patient, PatientStatus } from 'api/patients/types.ts'
+import { FinancialRegistry, Patient, PatientStatus } from 'api/patients/types.ts'
 
-export const columns: ColumnsType<Patient> = [
+export const patientColumns: ColumnsType<Patient> = [
   {
     title: '#',
     key: 'index',
@@ -40,3 +40,21 @@ export const tablePagination = {
   showSizeChanger: true,
   defaultPageSize: 5
 }
+
+export const financialRegistryColumns: ColumnsType<FinancialRegistry> | undefined = [
+  {
+    title: 'სერვისი',
+    dataIndex: 'service',
+    key: 'service'
+  },
+  {
+    title: 'თარიღი',
+    dataIndex: 'date',
+    key: 'date'
+  },
+  {
+    title: 'თანხა',
+    dataIndex: 'amount',
+    key: 'amount'
+  }
+]

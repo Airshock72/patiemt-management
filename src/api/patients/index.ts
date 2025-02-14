@@ -1,7 +1,12 @@
-import { Patient, PatientConditionFormValues, PatientFormValues } from 'api/patients/types.ts'
+import {
+  FinancialRegistry,
+  Patient,
+  PatientConditionFormValues,
+  PatientFormValues
+} from 'api/patients/types.ts'
 import {
   parseCreatePatientPersonalInfo,
-  parseDeletePatient, parseGetPatientCondition,
+  parseDeletePatient, parseFinancialRegistry, parseGetPatientCondition,
   parseGetPatientPersonalInfo,
   parsePatients, parseUpdatePatientCondition, parseUpdatePatientPersonalInfo
 } from 'api/patients/parsers.ts'
@@ -25,6 +30,10 @@ export const getPatientPersonalInfo = (patientId: ID): PatientFormValues => {
 
 export const getPatientCondition = (patientId: ID): PatientConditionFormValues => {
   return parseGetPatientCondition(patientId)
+}
+
+export const getFinancialRegistry = (patientId: ID): Array<FinancialRegistry> => {
+  return parseFinancialRegistry(patientId)
 }
 
 export const updatePatientPersonalInfo = (values: PatientFormValues, patientId: ID): PatientFormValues => {

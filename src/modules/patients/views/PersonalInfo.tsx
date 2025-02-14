@@ -1,5 +1,4 @@
 import { Button, Col, DatePicker, Form, Input, Modal, Row, Select } from 'antd'
-import usePersonalInfo from 'src/modules/patients/hooks/usePersonalInfo.ts'
 import usePatientPersonalInfo from 'src/modules/patients/hooks/usePatientPersonalInfo.ts'
 import { useParams } from 'react-router-dom'
 import { useAuth } from 'src/providers/AuthProvider.tsx'
@@ -8,38 +7,34 @@ import { UserRole } from 'api/auth/types.ts'
 const { Option } = Select
 
 const PersonalInfo = () => {
+  const [form] = Form.useForm()
   const params = useParams()
   const patientId = params.id
   const { getAuthUser } = useAuth()
   const user = getAuthUser()
   const isDoctor = user && user.roles === undefined ? false : user?.roles.includes(UserRole.DOCTOR)
   const {
-    state,
-    createPatient,
-    updatePatient
-  } = usePatientPersonalInfo({ id: patientId, isDoctor })
-  const [form] = Form.useForm()
-  const [otpForm] = Form.useForm()
-
-  const {
+    onFinish,
     setPhoneNumber,
     isModalVisible,
-    phoneNumber,
-    isFormDirty,
-    handleSendCode,
-    handleCancel,
     handleOk,
     onFieldsChange,
-    onFinish
-  } = usePersonalInfo({ form, stateData: state.data, patientId })
+    handleSendCode,
+    handleCancel,
+    isFormDirty,
+    phoneNumber,
+    state
+  } = usePatientPersonalInfo({ id: patientId, isDoctor, form })
+  const [otpForm] = Form.useForm()
 
   return (
     <>
       <Form
         form={form}
-        onFinish={values => onFinish(values, form.setFields, createPatient, updatePatient, patientId)}
+        onFinish={values => onFinish(values)}
         layout='vertical'
-        onFieldsChange={() => onFieldsChange(form.isFieldsTouched)}
+        initialValues={state.data}
+        onFieldsChange={() => onFieldsChange()}
       >
         <Row gutter={16}>
           <Col span={12}>
@@ -143,7 +138,7 @@ const PersonalInfo = () => {
       <Modal
         title='OTP ვერიფიკაცია'
         open={isModalVisible}
-        onOk={() => handleOk(otpForm.validateFields)}
+        onOk={() => handleOk()}
         onCancel={handleCancel}
       >
         <Form form={otpForm}>

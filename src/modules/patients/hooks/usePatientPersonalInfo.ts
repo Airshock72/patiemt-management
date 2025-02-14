@@ -3,22 +3,36 @@ import { PatientsApi } from 'src/api'
 import { useNavigate } from 'react-router-dom'
 import { PatientStore, usePatientReducer } from 'src/modules/patients/store/patient.ts'
 import { ID } from 'api/types/apiGlobalTypes.ts'
-import { useEffect } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { FormInstance } from 'antd/es/form/hooks/useForm'
+import { notification } from 'antd'
 
 interface UsePatientPersonalInfo {
   state: PatientStore
-  createPatient: (values: PatientFormValues) => void
-  updatePatient: (values: PatientFormValues, patientId: ID) => void
+  setPhoneNumber: Dispatch<SetStateAction<string>>
+  phoneNumber: string
+  isModalVisible: boolean
+  isFormDirty: boolean
+  handleSendCode: () => void
+  handleCancel: () => void
+  onFieldsChange: () => void
+  handleOk: () => void
+  onFinish: (values: PatientFormValues) => void
 }
 
 interface UsePatientProps {
+  form: FormInstance<PatientFormValues>
   id?: ID
   isDoctor?: boolean
 }
 
-const usePatientPersonalInfo = ({ id, isDoctor }: UsePatientProps): UsePatientPersonalInfo => {
+const usePatientPersonalInfo = ({ id, isDoctor, form }: UsePatientProps): UsePatientPersonalInfo => {
   const [state, dispatch] = usePatientReducer()
   const navigate = useNavigate()
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [isOtpValidated, setIsOtpValidated] = useState(false)
+  const [isFormDirty, setIsFormDirty] = useState(false)
 
   const getPatient = (patientId: ID) => {
     dispatch({ type: 'SEND_PATIENT_REQUEST' })
@@ -39,6 +53,63 @@ const usePatientPersonalInfo = ({ id, isDoctor }: UsePatientProps): UsePatientPe
     if (patient) navigate(`/patients/${patient.id}/edit`)
   }
 
+  const handleSendCode = () => {
+    setIsOtpValidated(false)
+    setIsModalVisible(true)
+  }
+
+  const onFinish = (values: PatientFormValues) => {
+    if (!isOtpValidated && !id) {
+      form.setFields([
+        {
+          name: 'phone',
+          errors: ['გთხოვთ დაასრულოთ OTP ვერიფიკაცია!']
+        }
+      ])
+      return
+    }
+    notification.success({
+      message: `პაციენტის მონაცემები ${id ? 'განახლდა' : 'შეინახა '} წარმატებით!`,
+      style: {
+        backgroundColor: '#f6ffed',
+        border: '1px solid #b7eb8f',
+        color: '#389e0d'
+      }
+    })
+    return id ? updatePatient(values, id) : createPatient(values)
+  }
+
+  const handleOk = () => {
+    form.validateFields()
+      .then(() => {
+        setIsOtpValidated(true)
+        setIsModalVisible(false)
+      })
+      .catch((error) => console.error(error))
+  }
+
+  const onFieldsChange = () => {
+    const fieldsTouched = form.isFieldsTouched()
+    setIsFormDirty(fieldsTouched)
+  }
+
+  const handleCancel = () => {
+    setIsOtpValidated(false)
+    setIsModalVisible(false)
+  }
+
+  useEffect(() => {
+    if (state.data && id) {
+      form.setFieldsValue(state.data)
+      setIsFormDirty(false)
+    }
+  }, [state.data, id, form])
+
+  useEffect(() => {
+    const unsubscribe = form.isFieldsTouched()
+    setIsFormDirty(unsubscribe)
+  }, [form])
+
   useEffect(() => {
     if (id) getPatient(id)
     if (!isDoctor) navigate('/access-denied')
@@ -46,8 +117,15 @@ const usePatientPersonalInfo = ({ id, isDoctor }: UsePatientProps): UsePatientPe
 
   return {
     state,
-    createPatient,
-    updatePatient
+    handleCancel,
+    setPhoneNumber,
+    isModalVisible,
+    phoneNumber,
+    isFormDirty,
+    handleSendCode,
+    onFinish,
+    handleOk,
+    onFieldsChange
   }
 }
 

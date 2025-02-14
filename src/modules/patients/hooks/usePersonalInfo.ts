@@ -14,12 +14,12 @@ interface UsePersonalInfo {
     handleCancel: () => void
     handleOk: (validateFields: (opt?: ValidateOptions) => Promise<PatientFormValues>) => void
     onFieldsChange: (
-        isFieldsTouched: ((nameList?: NamePath<PatientFormValues>[], allFieldsTouched?: boolean) => boolean)
+        isFieldsTouched: ((nameList?: Array<NamePath<PatientFormValues>>, allFieldsTouched?: boolean) => boolean)
             & ((allFieldsTouched?: boolean) => boolean)
     ) => void
     onFinish: (
         values: PatientFormValues,
-        setFields: (fields: FieldData<PatientFormValues>[]) => void,
+        setFields: (fields: Array<FieldData<PatientFormValues>>) => void,
         createPatient: (values: PatientFormValues) => void,
         updatePatient: (values: PatientFormValues, patientId: ID) => void,
         patientId?: ID

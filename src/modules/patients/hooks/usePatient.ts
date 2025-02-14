@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react'
 import { PatientTabs } from 'api/patients/types.ts'
 
 interface UsePatient {
-    activeTab: PatientTabs
-    handleTabChange: (activeKey: string) => void
+  activeTab: PatientTabs
+  handleTabChange: (activeKey: string) => void
 }
 
 const usePatient = (): UsePatient => {
-  const [activeTab, setActiveTab] = useState(PatientTabs.PERSONAL_INFO) // Default to the first tab
+  const [activeTab, setActiveTab] = useState<PatientTabs>(PatientTabs.PERSONAL_INFO) // Default to the first tab
 
   const handleTabChange = (activeKey: string) => {
     switch (activeKey) {
@@ -27,7 +27,17 @@ const usePatient = (): UsePatient => {
   useEffect(() => {
     const savedTab = localStorage.getItem('activeTab')
     if (savedTab) setActiveTab(savedTab as PatientTabs)
+
+    return () => {
+      localStorage.removeItem('activeTab')
+    }
   }, [])
+
+  useEffect(() => {
+    return () => {
+      localStorage.removeItem('activeTab')
+    }
+  }, [location])
 
   return { activeTab, handleTabChange }
 }

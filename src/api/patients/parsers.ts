@@ -123,20 +123,18 @@ export const parseCreatePatientPersonalInfo = (values: PatientFormValues): Patie
   }
 
   const patients = localStorage.getItem('patients')
-  const parsedPatients = JSON.parse(patients as string) //as string because, when I log in, I have always patients listing
+  const parsedPatients: Array<Patient> = JSON.parse(patients as string) //as string because, when I log in, I have always patients listing
   parsedPatients.unshift({
+    ...patientData,
     key: patientData.id,
-    gender: patientData.gender,
-    phone: patientData.phone,
-    country: patientData.country,
     status: PatientStatus.ACTIVE,
-    firstName: patientData.firstName,
-    lastName: patientData.lastName,
     personalNumber: `${Math.floor(Math.random() * 100000000000)}`,
     birthDate: patientData.dob !== null
       ? transformDate(patientData.dob.toDate())
       : '',
-    addedDate: new Date().toISOString().split('T')[0]
+    addedDate: new Date().toISOString().split('T')[0] as string,
+    disease: null,
+    symptoms: []
   })
 
   localStorage.setItem('patients', JSON.stringify(parsedPatients))

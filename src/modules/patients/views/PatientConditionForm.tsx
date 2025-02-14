@@ -4,8 +4,6 @@ import usePatientCondition from 'src/modules/patients/hooks/usePatientCondition.
 import { useParams } from 'react-router-dom'
 import { useAuth } from 'src/providers/AuthProvider.tsx'
 import { UserRole } from 'api/auth/types'
-import { PatientConditionFormValues } from 'api/patients/types.ts'
-import { useEffect } from 'react' // Import the Delete icon
 
 const { Option } = Select
 
@@ -16,27 +14,20 @@ const PatientConditionForm = () => {
   const { getAuthUser } = useAuth()
   const user = getAuthUser()
   const isDoctor = user && user.roles === undefined ? false : user?.roles.includes(UserRole.DOCTOR)
-  const { state, updatePatientCondition } = usePatientCondition({ id: patientId, isDoctor })
-
-  const onFinish = (values: PatientConditionFormValues) => {
-    if (patientId) {
-      const updatedValues = updatePatientCondition(values, patientId)
-      form.setFieldsValue(updatedValues)
-    }
-  }
-
-  useEffect(() => {
-    if (state.data) {
-      form.setFieldsValue(state.data)
-    }
-  }, [state.data, form])
+  const {
+    state,
+    isFormDirty,
+    onFieldsChange,
+    onFinish
+  } = usePatientCondition({ id: patientId, isDoctor, form })
 
   return (
     <Form
-      onFinish={onFinish}
+      onFinish={values => onFinish(values)}
       layout='vertical'
       form={form}
       initialValues={state.data}
+      onFieldsChange={() => onFieldsChange(form.isFieldsTouched)}
     >
       <Form.Item
         label='დაავადება'
@@ -45,7 +36,7 @@ const PatientConditionForm = () => {
       >
         <Select placeholder='აირჩიეთ დაავადება'>
           <Option value='flu'>გრიპი</Option>
-          <Option value='cold'>ცივი</Option>
+          <Option value='cold'>გაციება</Option>
           <Option value='covid'>COVID-19</Option>
           <Option value='allergy'>ალერგია</Option>
         </Select>
@@ -112,7 +103,11 @@ const PatientConditionForm = () => {
       </Form.Item>
 
       <Form.Item>
-        <Button type='primary' htmlType='submit'>
+        <Button
+          type='primary'
+          htmlType='submit'
+          disabled={patientId ? !isFormDirty : false}
+        >
             შენახვა
         </Button>
       </Form.Item>

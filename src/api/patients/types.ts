@@ -12,6 +12,15 @@ export interface Patient {
     gender: string | null
     phone: string | null
     country: string | null
+    disease: string | null
+    symptoms: Array<Symptom>
+}
+
+interface Symptom {
+    symptomId: string | null
+    date: Dayjs
+    severity: number
+    symptom: string
 }
 
 export enum PatientStatus {
@@ -27,4 +36,15 @@ export interface PatientFormValues {
     readonly country: string | null
     readonly gender: string | null
     readonly phone: string | null
+}
+
+export interface PatientConditionFormValues {
+   readonly disease: string | null
+   readonly symptoms: Array<Symptom>
+}
+
+export enum PatientTabs {
+    PERSONAL_INFO = '1',
+    CONDITION = '2',
+    FINANCIAL_REGISTRY = '3'
 }

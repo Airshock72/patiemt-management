@@ -1,5 +1,5 @@
 import {
-  Patient,
+  Patient, PatientConditionFormValues,
   PatientFormValues,
   PatientStatus
 } from 'api/patients/types.ts'
@@ -7,11 +7,12 @@ import { transformDate } from 'api/parsers/parsers.ts'
 import { ID } from 'api/types/apiGlobalTypes.ts'
 import { initialPatient } from 'src/modules/patients/store/patient.ts'
 import dayjs, { Dayjs } from 'dayjs'
+import { initialPatientCondition } from 'src/modules/patients/store/patientCondition.ts'
 
 export const parsePatients = (): Array<Patient> => {
   const patients = localStorage.getItem('patients')
   if (patients !== null) return JSON.parse(patients)
-  const staticPatients = [
+  const staticPatients: Array<Patient> = [
     {
       key: '1',
       firstName: 'John',
@@ -22,7 +23,9 @@ export const parsePatients = (): Array<Patient> => {
       status: PatientStatus.ACTIVE,
       country: null,
       gender: null,
-      phone: null
+      phone: null,
+      disease: null,
+      symptoms: []
     },
     {
       key: '2',
@@ -34,7 +37,9 @@ export const parsePatients = (): Array<Patient> => {
       status: PatientStatus.INACTIVE,
       country: null,
       gender: null,
-      phone: null
+      phone: null,
+      disease: null,
+      symptoms: []
     },
     {
       key: '3',
@@ -46,7 +51,9 @@ export const parsePatients = (): Array<Patient> => {
       status: PatientStatus.ACTIVE,
       country: null,
       gender: null,
-      phone: null
+      phone: null,
+      disease: null,
+      symptoms: []
     },
     {
       key: '4',
@@ -58,7 +65,9 @@ export const parsePatients = (): Array<Patient> => {
       status: PatientStatus.INACTIVE,
       country: null,
       gender: null,
-      phone: null
+      phone: null,
+      disease: null,
+      symptoms: []
     },
     {
       key: '5',
@@ -70,7 +79,9 @@ export const parsePatients = (): Array<Patient> => {
       status: PatientStatus.INACTIVE,
       country: null,
       gender: null,
-      phone: null
+      phone: null,
+      disease: null,
+      symptoms: []
     },
     {
       key: '6',
@@ -82,7 +93,9 @@ export const parsePatients = (): Array<Patient> => {
       status: PatientStatus.ACTIVE,
       country: null,
       gender: null,
-      phone: null
+      phone: null,
+      disease: null,
+      symptoms: []
     }
   ]
   localStorage.setItem('patients', JSON.stringify(staticPatients))
@@ -98,7 +111,7 @@ export const parseDeletePatient = (key: string): Array<Patient> => {
   return filteredPatients
 }
 
-export const parseCreatePatient = (values: PatientFormValues): PatientFormValues => {
+export const parseCreatePatientPersonalInfo = (values: PatientFormValues): PatientFormValues => {
   const patientData = {
     country: values.country,
     gender: values.gender,
@@ -131,7 +144,7 @@ export const parseCreatePatient = (values: PatientFormValues): PatientFormValues
   return patientData
 }
 
-export const parseGetPatient = (patientId: ID): PatientFormValues => {
+export const parseGetPatientPersonalInfo = (patientId: ID): PatientFormValues => {
   const patients = localStorage.getItem('patients')
   if (patients === null) return initialPatient
   const parsedPatients: Array<Patient> = JSON.parse(patients)
@@ -148,7 +161,19 @@ export const parseGetPatient = (patientId: ID): PatientFormValues => {
   }
 }
 
-export const parseUpdatePatient = (values: PatientFormValues, patientId: ID): PatientFormValues => {
+export const parseGetPatientCondition = (patientId: ID): PatientConditionFormValues => {
+  const patients = localStorage.getItem('patients')
+  if (patients === null) return initialPatientCondition
+  const parsedPatients: Array<Patient> = JSON.parse(patients)
+  const foundItem = parsedPatients.find((el) => el.key === patientId)
+  if (!foundItem) return initialPatientCondition
+  return {
+    disease: foundItem.disease,
+    symptoms: foundItem.symptoms.map(symptom => ({ ...symptom, date: dayjs(symptom.date) }))
+  }
+}
+
+export const parseUpdatePatientPersonalInfo = (values: PatientFormValues, patientId: ID): PatientFormValues => {
   const patients = localStorage.getItem('patients')
   if (patients === null) return values
 
@@ -166,17 +191,15 @@ export const parseUpdatePatient = (values: PatientFormValues, patientId: ID): Pa
     dob: dayjs(values.dob)
   }
 
-  const updatedPatient = {
+  const updatedPatient: Patient = {
+    ...foundItem,
     key: patientId,
     birthDate: transformDate((patientFormValue.dob as Dayjs).toDate()),
     gender: patientFormValue.gender,
     country: patientFormValue.country,
     phone: patientFormValue.phone,
     lastName: patientFormValue.lastName,
-    firstName: patientFormValue.firstName,
-    addedDate: foundItem.addedDate,
-    status: foundItem.status,
-    personalNumber: foundItem.personalNumber
+    firstName: patientFormValue.firstName
   }
 
   parsedPatients.splice(parsedPatients.indexOf(foundItem), 1, updatedPatient)
@@ -184,4 +207,40 @@ export const parseUpdatePatient = (values: PatientFormValues, patientId: ID): Pa
   localStorage.setItem('patients', JSON.stringify(parsedPatients))
 
   return patientFormValue
+}
+
+export const parseUpdatePatientCondition = (values: PatientConditionFormValues, patientId: ID): PatientConditionFormValues => {
+  const patients = localStorage.getItem('patients')
+  if (patients === null) return values
+
+  const parsedPatients: Array<Patient> = JSON.parse(patients)
+  const foundItem: Patient | undefined = parsedPatients.find(el => el.key === patientId)
+  if (!foundItem) return values
+
+  const patientConditionFormValue: PatientConditionFormValues = {
+    disease: values.disease,
+    symptoms: values.symptoms.map(symptom => {
+      const isCreate = symptom.symptomId === null || symptom.symptomId === undefined
+      return {
+        ...symptom,
+        symptomId: isCreate
+          ? Date.now() + '-' + Math.floor(Math.random() * 10000)
+          : symptom.symptomId
+      }
+    })
+  }
+
+  const updatedPatient: Patient = {
+    ...foundItem,
+    key: patientId,
+    personalNumber: foundItem.personalNumber,
+    symptoms: patientConditionFormValue.symptoms,
+    disease: patientConditionFormValue.disease
+  }
+
+  parsedPatients.splice(parsedPatients.indexOf(foundItem), 1, updatedPatient)
+
+  localStorage.setItem('patients', JSON.stringify(parsedPatients))
+
+  return patientConditionFormValue
 }

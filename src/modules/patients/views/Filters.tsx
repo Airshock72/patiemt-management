@@ -19,19 +19,19 @@ const Filters = ({ form, onFinish }: FiltersProps) => {
       <Form form={form} onFinish={onFinish} layout='vertical'>
         <Row gutter={16} align='middle'>
           <Col span={4}>
-            <Form.Item name='firstName' label='First Name'>
+            <Form.Item name='firstName' label='სახელი'>
               <Input placeholder='სახელი' />
             </Form.Item>
           </Col>
           <Col span={4}>
-            <Form.Item name='lastName' label='Last Name'>
+            <Form.Item name='lastName' label='გვარი'>
               <Input placeholder='გვარი' />
             </Form.Item>
           </Col>
           <Col span={4}>
             <Form.Item
               name='personalNumber'
-              label='Personal Number'
+              label='პირადი ნომერი'
             >
               <Input type='number' placeholder='პირადი ნომერი' />
             </Form.Item>
@@ -42,7 +42,7 @@ const Filters = ({ form, onFinish }: FiltersProps) => {
             </Form.Item>
           </Col>
           <Col span={4}>
-            <Form.Item name='status' label='Status'>
+            <Form.Item name='status' label='სტატუსი'>
               <Select placeholder='აირჩიეთ სტატუსი' allowClear>
                 <Option value='1'>აქტიური</Option>
                 <Option value='2'>პასიური</Option>

@@ -1,9 +1,9 @@
-import { Patient, PatientFormValues } from 'api/patients/types.ts'
+import { Patient, PatientConditionFormValues, PatientFormValues } from 'api/patients/types.ts'
 import {
-  parseCreatePatient,
-  parseDeletePatient,
-  parseGetPatient,
-  parsePatients, parseUpdatePatient
+  parseCreatePatientPersonalInfo,
+  parseDeletePatient, parseGetPatientCondition,
+  parseGetPatientPersonalInfo,
+  parsePatients, parseUpdatePatientCondition, parseUpdatePatientPersonalInfo
 } from 'api/patients/parsers.ts'
 import { ID } from 'api/types/apiGlobalTypes.ts'
 
@@ -15,14 +15,22 @@ export const deletePatient = (key: string): Array<Patient> => {
   return parseDeletePatient(key)
 }
 
-export const createPatient = (values: PatientFormValues): PatientFormValues => {
-  return parseCreatePatient(values)
+export const createPatientPersonalInfo = (values: PatientFormValues): PatientFormValues => {
+  return parseCreatePatientPersonalInfo(values)
 }
 
-export const getPatient = (patientId: ID): PatientFormValues => {
-  return parseGetPatient(patientId)
+export const getPatientPersonalInfo = (patientId: ID): PatientFormValues => {
+  return parseGetPatientPersonalInfo(patientId)
 }
 
-export const updatePatient = (values: PatientFormValues, patientId: ID): PatientFormValues => {
-  return parseUpdatePatient(values, patientId)
+export const getPatientCondition = (patientId: ID): PatientConditionFormValues => {
+  return parseGetPatientCondition(patientId)
+}
+
+export const updatePatientPersonalInfo = (values: PatientFormValues, patientId: ID): PatientFormValues => {
+  return parseUpdatePatientPersonalInfo(values, patientId)
+}
+
+export const updatePatientCondition = (values: PatientConditionFormValues, patientId: ID): PatientConditionFormValues => {
+  return parseUpdatePatientCondition(values, patientId)
 }

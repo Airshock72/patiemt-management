@@ -1,12 +1,12 @@
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { PatientFormValues } from 'api/patients/types.ts'
 import { FieldData, NamePath, ValidateOptions } from 'rc-field-form/es/interface'
 import { notification } from 'antd'
 import { ID } from 'api/types/apiGlobalTypes'
+import { FormInstance } from 'antd/es/form/hooks/useForm'
 
 interface UsePersonalInfo {
     setPhoneNumber: Dispatch<SetStateAction<string>>
-    setIsFormDirty: Dispatch<SetStateAction<boolean>>
     phoneNumber: string
     isModalVisible: boolean
     isFormDirty: boolean
@@ -26,7 +26,15 @@ interface UsePersonalInfo {
     ) => void
 }
 
-const usePersonalInfo = (): UsePersonalInfo => {
+interface UsePersonalInfoProps {
+    form: FormInstance<PatientFormValues>
+    stateData: PatientFormValues
+    patientId?: ID
+}
+
+const usePersonalInfo = (
+  { form, patientId, stateData }: UsePersonalInfoProps
+): UsePersonalInfo => {
   const [phoneNumber, setPhoneNumber] = useState('')
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [isOtpValidated, setIsOtpValidated] = useState(false)
@@ -86,9 +94,20 @@ const usePersonalInfo = (): UsePersonalInfo => {
     return patientId ? updatePatient(values, patientId) : createPatient(values)
   }
 
+  useEffect(() => {
+    if (stateData && patientId) {
+      form.setFieldsValue(stateData)
+      setIsFormDirty(false)
+    }
+  }, [stateData, patientId, form])
+
+  useEffect(() => {
+    const unsubscribe = form.isFieldsTouched()
+    setIsFormDirty(unsubscribe)
+  }, [form])
+
   return {
     setPhoneNumber,
-    setIsFormDirty,
     isModalVisible,
     phoneNumber,
     isFormDirty,

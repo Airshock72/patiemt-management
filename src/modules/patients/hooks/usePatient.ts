@@ -1,55 +1,35 @@
-import { PatientFormValues } from 'api/patients/types.ts'
-import { PatientsApi } from 'src/api'
-import { useNavigate } from 'react-router-dom'
-import { PatientStore, usePatientReducer } from 'src/modules/patients/store/patient.ts'
-import { ID } from 'api/types/apiGlobalTypes.ts'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { PatientTabs } from 'api/patients/types.ts'
 
 interface UsePatient {
-  state: PatientStore
-  createPatient: (values: PatientFormValues) => void
-  updatePatient: (values: PatientFormValues, patientId: ID) => void
+    activeTab: PatientTabs
+    handleTabChange: (activeKey: string) => void
 }
 
-interface UsePatientProps {
-  id?: ID
-  isDoctor?: boolean
-}
+const usePatient = (): UsePatient => {
+  const [activeTab, setActiveTab] = useState(PatientTabs.PERSONAL_INFO) // Default to the first tab
 
-const usePatient = ({ id, isDoctor }: UsePatientProps): UsePatient => {
-  const [state, dispatch] = usePatientReducer()
-  const navigate = useNavigate()
-
-
-  const getPatient = (patientId: ID) => {
-    dispatch({ type: 'SEND_PATIENT_REQUEST' })
-    const patient = PatientsApi.getPatient(patientId)
-    dispatch({ type: 'DONE_PATIENT_REQUEST', payload: patient })
-  }
-
-  const updatePatient = (values: PatientFormValues, patientId: ID) => {
-    dispatch({ type: 'SEND_PATIENT_UPDATE' })
-    const patient = PatientsApi.updatePatient(values, patientId)
-    dispatch({ type: 'DONE_PATIENT_UPDATE', payload: patient })
-  }
-
-  const createPatient = (values: PatientFormValues) => {
-    dispatch({ type: 'SEND_PATIENT_CREATE' })
-    const patient = PatientsApi.createPatient(values)
-    dispatch({ type: 'DONE_PATIENT_CREATE', payload: patient })
-    if (patient) navigate(`/patients/${patient.id}/edit`)
+  const handleTabChange = (activeKey: string) => {
+    switch (activeKey) {
+    case PatientTabs.PERSONAL_INFO:
+    case PatientTabs.CONDITION:
+    case PatientTabs.FINANCIAL_REGISTRY:
+      setActiveTab(activeKey)
+      localStorage.setItem('activeTab', activeKey)
+      break
+    default:
+      setActiveTab(PatientTabs.PERSONAL_INFO) // Fallback to a default tab
+      localStorage.setItem('activeTab', PatientTabs.PERSONAL_INFO)
+      break
+    }
   }
 
   useEffect(() => {
-    if (id) getPatient(id)
-    if (!isDoctor) navigate('/access-denied')
-  }, [id])
+    const savedTab = localStorage.getItem('activeTab')
+    if (savedTab) setActiveTab(savedTab as PatientTabs)
+  }, [])
 
-  return {
-    state,
-    createPatient,
-    updatePatient
-  }
+  return { activeTab, handleTabChange }
 }
 
 export default usePatient

@@ -1,104 +1,123 @@
-// import { useState } from 'react'
-// import { Form, Select, Input, Button, Slider, DatePicker, Row, Col } from 'antd'
-//
-// const { Option } = Select
-//
-// const PatientConditionForm = () => {
-//   const [symptoms, setSymptoms] = useState([])
-//
-//   const handleAddSymptom = () => {
-//     setSymptoms([...symptoms, { symptom: '', date: null, severity: 0 }])
-//   }
-//
-//   const handleRemoveSymptom = (index) => {
-//     const newSymptoms = [...symptoms]
-//     newSymptoms.splice(index, 1)
-//     setSymptoms(newSymptoms)
-//   }
-//
-//   const handleSymptomChange = (index, field, value) => {
-//     const newSymptoms = [...symptoms]
-//     newSymptoms[index][field] = value
-//     setSymptoms(newSymptoms)
-//   }
-//
-//   const onFinish = (values) => {
-//     console.log('Received values of form:', values)
-//   }
-//
-//   return (
-//     <Form onFinish={onFinish} layout='vertical'>
-//       <Form.Item
-//         label='დაავადება'
-//         name='disease'
-//         rules={[{ required: true, message: 'გთხოვთ აირჩიოთ დაავადება!' }]}
-//       >
-//         <Select placeholder='აირჩიეთ დაავადება'>
-//           <Option value='flu'>გრიპი</Option>
-//           <Option value='cold'>ცივი</Option>
-//           <Option value='covid'>COVID-19</Option>
-//           <Option value='allergy'>ალერგია</Option>
-//         </Select>
-//       </Form.Item>
-//
-//       <Form.Item label='სიმპტომები'>
-//         {symptoms.map((symptom, index) => (
-//           <Row gutter={16} key={index} style={{ marginBottom: 16 }}>
-//             <Col span={8}>
-//               <Form.Item
-//                 label='სიმპტომი'
-//                 rules={[{ required: true, message: 'გთხოვთ შეიყვანოთ სიმპტომი!' }]}
-//               >
-//                 <Input
-//                   value={symptom.symptom}
-//                   onChange={(e) => handleSymptomChange(index, 'symptom', e.target.value)}
-//                 />
-//               </Form.Item>
-//             </Col>
-//             <Col span={8}>
-//               <Form.Item
-//                 label='თარიღი'
-//                 rules={[{ required: true, message: 'გთხოვთ შეიყვანოთ თარიღი!' }]}
-//               >
-//                 <DatePicker
-//                   style={{ width: '100%' }}
-//                   value={symptom.date}
-//                   onChange={(date) => handleSymptomChange(index, 'date', date)}
-//                 />
-//               </Form.Item>
-//             </Col>
-//             <Col span={6}>
-//               <Form.Item
-//                 label='ტკივილის სიმძლავრე'
-//                 rules={[{ required: true, message: 'გთხოვთ მიუთითოთ ტკივილის სიმძლავრე!' }]}
-//               >
-//                 <Slider
-//                   min={0}
-//                   max={100}
-//                   value={symptom.severity}
-//                   onChange={(value) => handleSymptomChange(index, 'severity', value)}
-//                 />
-//               </Form.Item>
-//             </Col>
-//             <Col span={2}>
-//               <Button type='link' onClick={() => handleRemoveSymptom(index)}>
-//                 წაშლა
-//               </Button>
-//             </Col>
-//           </Row>
-//         ))}
-//         <Button type='dashed' onClick={handleAddSymptom} style={{ width: '100%' }}>
-//          სიმპტომის დამატება
-//         </Button>
-//       </Form.Item>
-//
-//       <Form.Item>
-//         <Button type='primary' htmlType='submit'>
-//           შენახვა
-//         </Button>
-//       </Form.Item>
-//     </Form>
-//   )
-// }
-//
-// export default PatientConditionForm
+import { Form, Select, Input, Button, Slider, DatePicker, Row, Col, Tooltip } from 'antd'
+import { DeleteOutlined } from '@ant-design/icons'
+import usePatientCondition from 'src/modules/patients/hooks/usePatientCondition.ts'
+import { useParams } from 'react-router-dom'
+import { useAuth } from 'src/providers/AuthProvider.tsx'
+import { UserRole } from 'api/auth/types'
+import { PatientConditionFormValues } from 'api/patients/types.ts'
+import { useEffect } from 'react' // Import the Delete icon
+
+const { Option } = Select
+
+const PatientConditionForm = () => {
+  const [form] = Form.useForm()
+  const params = useParams()
+  const patientId = params.id
+  const { getAuthUser } = useAuth()
+  const user = getAuthUser()
+  const isDoctor = user && user.roles === undefined ? false : user?.roles.includes(UserRole.DOCTOR)
+  const { state, updatePatientCondition } = usePatientCondition({ id: patientId, isDoctor })
+
+  const onFinish = (values: PatientConditionFormValues) => {
+    if (patientId) {
+      const updatedValues = updatePatientCondition(values, patientId)
+      form.setFieldsValue(updatedValues)
+    }
+  }
+
+  useEffect(() => {
+    if (state.data) {
+      form.setFieldsValue(state.data)
+    }
+  }, [state.data, form])
+
+  return (
+    <Form
+      onFinish={onFinish}
+      layout='vertical'
+      form={form}
+      initialValues={state.data}
+    >
+      <Form.Item
+        label='დაავადება'
+        name='disease'
+        rules={[{ required: true, message: 'გთხოვთ აირჩიოთ დაავადება!' }]}
+      >
+        <Select placeholder='აირჩიეთ დაავადება'>
+          <Option value='flu'>გრიპი</Option>
+          <Option value='cold'>ცივი</Option>
+          <Option value='covid'>COVID-19</Option>
+          <Option value='allergy'>ალერგია</Option>
+        </Select>
+      </Form.Item>
+
+      <Form.Item label='სიმპტომები'>
+        <Form.List name='symptoms'>
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, ...restField }) => (
+                <Row gutter={16} key={key} style={{ marginBottom: 16 }}>
+                  <Col span={8}>
+                    <Form.Item
+                      {...restField}
+                      label='სიმპტომი'
+                      name={[name, 'symptom']}
+                      rules={[{ required: true, message: 'გთხოვთ შეიყვანოთ სიმპტომი!' }]}
+                    >
+                      <Input />
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
+                    <Form.Item
+                      {...restField}
+                      label='შენიშვნის თარიღი'
+                      name={[name, 'date']}
+                      rules={[{ required: true, message: 'გთხოვთ შეიყვანოთ შენიშვნის თარიღი!' }]}
+                    >
+                      <DatePicker style={{ width: '100%' }} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={6}>
+                    <Form.Item
+                      {...restField}
+                      label='ტკივილის სიმძლავრე'
+                      name={[name, 'severity']}
+                      rules={[{ required: true, message: 'გთხოვთ მიუთითოთ ტკივილის სიმძლავრე!' }]}
+                    >
+                      <Slider min={0} max={100} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={2} className='!flex !justify-center !items-center'>
+                    <Tooltip title='წაშლა'>
+                      <Button
+                        type='link'
+                        className='!text-red-600'
+                        onClick={() => remove(name)}
+                        icon={<DeleteOutlined />}
+                      />
+                    </Tooltip>
+                  </Col>
+                </Row>
+              ))}
+              <Button
+                type='dashed'
+                onClick={() => add()}
+                style={{ width: '100%' }}
+              >
+                    სიმპტომის დამატება
+              </Button>
+            </>
+          )}
+        </Form.List>
+      </Form.Item>
+
+      <Form.Item>
+        <Button type='primary' htmlType='submit'>
+            შენახვა
+        </Button>
+      </Form.Item>
+    </Form>
+  )
+}
+
+export default PatientConditionForm

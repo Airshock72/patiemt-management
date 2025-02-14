@@ -1,32 +1,29 @@
 import { Button, Col, DatePicker, Form, Input, Modal, Row, Select } from 'antd'
-import { PatientFormValues } from 'api/patients/types.ts'
-import { useEffect } from 'react'
-import { PatientStore } from 'src/modules/patients/store/patient.ts'
-import { ID } from 'api/types/apiGlobalTypes.ts'
 import usePersonalInfo from 'src/modules/patients/hooks/usePersonalInfo.ts'
+import usePatientPersonalInfo from 'src/modules/patients/hooks/usePatientPersonalInfo.ts'
+import { useParams } from 'react-router-dom'
+import { useAuth } from 'src/providers/AuthProvider.tsx'
+import { UserRole } from 'api/auth/types.ts'
 
 const { Option } = Select
 
-interface PersonalInfoProps {
-    state: PatientStore
-    patientId?: string
-    createPatient: (values: PatientFormValues) => void
-    updatePatient: (values: PatientFormValues, patientId: ID) => void
-}
-
-const PersonalInfo = ({
-  state,
-  patientId,
-  updatePatient,
-  createPatient
-}: PersonalInfoProps) => {
+const PersonalInfo = () => {
+  const params = useParams()
+  const patientId = params.id
+  const { getAuthUser } = useAuth()
+  const user = getAuthUser()
+  const isDoctor = user && user.roles === undefined ? false : user?.roles.includes(UserRole.DOCTOR)
+  const {
+    state,
+    createPatient,
+    updatePatient
+  } = usePatientPersonalInfo({ id: patientId, isDoctor })
   const [form] = Form.useForm()
   const [otpForm] = Form.useForm()
 
   const {
     setPhoneNumber,
     isModalVisible,
-    setIsFormDirty,
     phoneNumber,
     isFormDirty,
     handleSendCode,
@@ -34,19 +31,7 @@ const PersonalInfo = ({
     handleOk,
     onFieldsChange,
     onFinish
-  } = usePersonalInfo()
-
-  useEffect(() => {
-    if (state.data && patientId) {
-      form.setFieldsValue(state.data)
-      setIsFormDirty(false)
-    }
-  }, [state.data, patientId, form])
-
-  useEffect(() => {
-    const unsubscribe = form.isFieldsTouched()
-    setIsFormDirty(unsubscribe)
-  }, [form])
+  } = usePersonalInfo({ form, stateData: state.data, patientId })
 
   return (
     <>

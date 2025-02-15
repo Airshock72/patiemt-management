@@ -22,11 +22,12 @@ interface UsePatientPersonalInfo {
 
 interface UsePatientProps {
   form: FormInstance<PatientFormValues>
+  otpForm: FormInstance<{ otp: string }>
   id?: ID
   isDoctor?: boolean
 }
 
-const usePatientPersonalInfo = ({ id, isDoctor, form }: UsePatientProps): UsePatientPersonalInfo => {
+const usePatientPersonalInfo = ({ id, isDoctor, form, otpForm }: UsePatientProps): UsePatientPersonalInfo => {
   const [state, dispatch] = usePatientReducer()
   const navigate = useNavigate()
   const [phoneNumber, setPhoneNumber] = useState('')
@@ -80,7 +81,7 @@ const usePatientPersonalInfo = ({ id, isDoctor, form }: UsePatientProps): UsePat
   }
 
   const handleOk = () => {
-    form.validateFields()
+    otpForm.validateFields()
       .then(() => {
         setIsOtpValidated(true)
         setIsModalVisible(false)

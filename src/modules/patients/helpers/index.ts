@@ -1,34 +1,34 @@
 import type { ColumnsType } from 'antd/es/table'
 import { FinancialRegistry, Patient, PatientStatus } from 'api/patients/types.ts'
 
-export const patientColumns: ColumnsType<Patient> = [
+export const patientColumns = (translate: (key: string, defaultValue: string) => string): ColumnsType<Patient> => [
   {
     title: '#',
     key: 'index',
     render: (_, __, index) => index + 1
   },
   {
-    title: 'სახელი',
+    title: translate('firstname', 'სახელი'),
     dataIndex: 'firstName',
     key: 'firstName'
   },
   {
-    title: 'გვარი',
+    title: translate('lastname', 'გვარი'),
     dataIndex: 'lastName',
     key: 'lastName'
   },
   {
-    title: 'პირადი ნომერი',
+    title: translate('private_number', 'პირადი ნომერი'),
     dataIndex: 'personalNumber',
     key: 'personalNumber'
   },
   {
-    title: 'დამატების თარიღი',
+    title: translate('create_date', 'დამატების თარიღი'),
     dataIndex: 'addedDate',
     key: 'addedDate'
   },
   {
-    title: 'სტატუსი',
+    title: translate('status', 'სტატუსი'),
     dataIndex: 'status',
     key: 'status',
     render: (status: PatientStatus) => status === PatientStatus.ACTIVE ? 'აქტიური' : 'პასიური'
@@ -41,19 +41,19 @@ export const tablePagination = {
   defaultPageSize: 5
 }
 
-export const financialRegistryColumns: ColumnsType<FinancialRegistry> | undefined = [
+export const financialRegistryColumns = (translate: (key: string, defaultValue: string) => string): ColumnsType<FinancialRegistry> | undefined => [
   {
-    title: 'სერვისი',
+    title: translate('service', 'სერვისი'),
     dataIndex: 'service',
     key: 'service'
   },
   {
-    title: 'თარიღი',
+    title: translate('date', 'თარიღი'),
     dataIndex: 'date',
     key: 'date'
   },
   {
-    title: 'თანხა',
+    title: translate('price', 'თანხა'),
     dataIndex: 'amount',
     key: 'amount'
   }

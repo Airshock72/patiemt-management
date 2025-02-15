@@ -4,10 +4,12 @@ import { useAuth } from 'src/providers/AuthProvider.tsx'
 import { Navigate } from 'react-router-dom'
 import { LoginFormValue } from 'src/modules/auth/login/types'
 import { UserRole } from 'api/auth/types.ts'
+import { useTranslation } from 'src/providers/TranslationProvider.tsx'
 
 const LoginPage = () => {
   const auth = useAuth()
   const [form] = Form.useForm()
+  const { translate } = useTranslation()
 
   const onFinish = (values: LoginFormValue) =>  auth.signin(values)
 
@@ -16,32 +18,32 @@ const LoginPage = () => {
   return (
     <div className='flex items-center justify-center !min-h-screen bg-gradient-to-r from-blue-400 via-purple-500 to-pink-600'>
       <div className='w-full max-w-md p-8 bg-white rounded-lg shadow-2xl'>
-        <h1 className='text-2xl font-bold text-center mb-6'>ავტორიზაცია</h1>
+        <h1 className='text-2xl font-bold text-center mb-6'>{translate('authorization', 'ავტორიზაცია')}</h1>
         <Form form={form} onFinish={onFinish} layout='vertical'>
           <Form.Item
-            label='სახელი'
+            label={translate('username', 'სახელი')}
             name='username'
-            rules={[{ required: true, message: 'გთხოვთ შეიყვანოთ სახელი' }]}>
-            <Input placeholder='შეიყვანეთ თქვენი სახელი' />
+            rules={[{ required: true, message: translate('please_enter_name', 'გთხოვთ შეიყვანოთ სახელი') }]}>
+            <Input placeholder={translate('enter_your_username', 'შეიყვანეთ თქვენი სახელი')} />
           </Form.Item>
           <Form.Item
             className='!mt-3'
-            label='პაროლი'
+            label={translate('password', 'პაროლი')}
             name='password'
-            rules={[{ required: true, message: 'გთხოვთ შეიყვანოთ თქვენი პაროლი' }]}>
+            rules={[{ required: true, message: translate('please_enter_your_password', 'გთხოვთ შეიყვანოთ თქვენი პაროლი') }]}>
             <Input.Password
-              placeholder='შეიყვანეთ თქვენი პაროლი'
+              placeholder={translate('enter_your_password', 'შეიყვანეთ თქვენი პაროლი')}
               iconRender={(visible) =>
                 visible ? <EyeTwoTone /> : <EyeInvisibleOutlined />
               }
             />
           </Form.Item>
-          <Form.Item label='შედი სისტემაში როგორც' className='!mt-3'>
+          <Form.Item label={translate('login_as', 'შედი სისტემაში როგორც')} className='!mt-3'>
             <Form.Item name='roles' valuePropName='value' noStyle>
               <Checkbox.Group>
                 <div className='flex gap-4'>
-                  <Checkbox value={UserRole.ADMIN}>ადმინი</Checkbox>
-                  <Checkbox value={UserRole.DOCTOR}>ექიმი</Checkbox>
+                  <Checkbox value={UserRole.ADMIN}>{translate('admin', 'ადმინი')}</Checkbox>
+                  <Checkbox value={UserRole.DOCTOR}>{translate('doctor', 'ექიმი')}</Checkbox>
                 </div>
               </Checkbox.Group>
             </Form.Item>
@@ -51,7 +53,7 @@ const LoginPage = () => {
               type='primary'
               htmlType='submit'
               className='w-full bg-blue-500 hover:bg-blue-600'>
-                შესვლა
+              {translate('log_in', 'შესვლა')}
             </Button>
           </Form.Item>
         </Form>

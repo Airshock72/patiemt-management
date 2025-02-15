@@ -4,6 +4,7 @@ import useFinancialRegistry from 'src/modules/patients/hooks/useFinancialRegistr
 import { useAuth } from 'src/providers/AuthProvider.tsx'
 import { UserRole } from 'api/auth/types.ts'
 import { financialRegistryColumns } from 'src/modules/patients/helpers'
+import { useTranslation } from 'src/providers/TranslationProvider.tsx'
 
 const FinancialRegistry = () => {
   const params = useParams()
@@ -13,6 +14,7 @@ const FinancialRegistry = () => {
   const isDoctor = user && user.roles === undefined ? false : user?.roles.includes(UserRole.DOCTOR)
   const { state } = useFinancialRegistry({ patientId, isDoctor })
   const navigate = useNavigate()
+  const { translate } = useTranslation()
 
   const handleFinish = () => {
     navigate('/')
@@ -22,15 +24,16 @@ const FinancialRegistry = () => {
     <div>
       <Table
         dataSource={state.data}
-        columns={financialRegistryColumns}
+        columns={financialRegistryColumns(translate)}
         pagination={false}
+        bordered
       />
       <Button
         type='primary'
         onClick={handleFinish}
         style={{ marginTop: 16 }}
       >
-        დასრულება
+        {translate('finish', 'დასრულება')}
       </Button>
     </div>
   )

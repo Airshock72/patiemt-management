@@ -9,9 +9,11 @@ import { UserRole } from 'api/auth/types.ts'
 import { Patient } from 'api/patients/types.ts'
 import TableButton from 'src/modules/patients/views/TableButton.tsx'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'src/providers/TranslationProvider.tsx'
 
 const PatientPage = () => {
   const { getAuthUser } = useAuth()
+  const { translate } = useTranslation()
   const user = getAuthUser()
   const isAdminOrDoctor = user && user.roles === undefined
     ? false
@@ -26,26 +28,26 @@ const PatientPage = () => {
       <Filters form={form} onFinish={onFinish} />
       <Table
         columns={[
-          ...patientColumns,
+          ...patientColumns(translate),
           ...(isAdminOrDoctor
             ? [
               {
-                title: 'რედაქტირება',
+                title: translate('edit', 'რედაქტირება'),
                 key: 'edit',
                 render: (_: unknown, record: Patient) => (
                   <TableButton
-                    title='რედაქტირება'
+                    title={translate('edit', 'რედაქტირება')}
                     handleClick={() => navigate(`/patients/${record.key}/edit`)}
                     icon={<EditOutlined />}
                   />
                 )
               },
               {
-                title: 'წაშლა',
+                title: translate('delete', 'წაშლა'),
                 key: 'action',
                 render: (_: unknown, record: Patient) => (
                   <TableButton
-                    title='წაშლა'
+                    title={translate('delete', 'წაშლა')}
                     danger
                     icon={<DeleteOutlined />}
                     handleClick={() => handleDelete(record)}
@@ -63,7 +65,7 @@ const PatientPage = () => {
         title={() => (
           <div className='flex justify-between items-center'>
             <span className='font-bold py-5 align-middle'>
-             პაციენტების სია
+              {translate('patients_list', 'პაციენტების სია')}
             </span>
             {isDoctor &&
                 <Button
@@ -72,7 +74,7 @@ const PatientPage = () => {
                   icon={<PlusOutlined />}
                   onClick={() => navigate('/patients/create')}
                 >
-                  პაციენტის დამატება
+                  {translate('add_patient', 'პაციენტის დამატება')}
                 </Button>}
           </div>
         )}

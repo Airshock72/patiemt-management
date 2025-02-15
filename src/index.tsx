@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { createRoot } from 'react-dom/client'
 import App from './App'
 import { ThemeProvider } from 'src/providers/ThemeContext.tsx'
+import TranslationProvider from 'src/providers/TranslationProvider.tsx'
 
 const createElement = document.createElement('div')
 createElement.className = 'flex flex-col flex-1'
@@ -16,7 +17,9 @@ const root = createRoot(domNode)
 root.render(
   <BrowserRouter>
     <ThemeProvider>
-      <App />
+      <TranslationProvider>
+        <App />
+      </TranslationProvider>
     </ThemeProvider>
   </BrowserRouter>
 )

@@ -14,6 +14,8 @@ import { useAuth } from 'src/providers/AuthProvider.tsx'
 import { UserRole } from 'api/auth/types.ts'
 import useHeader from 'src/modules/header/hooks/useHeader.ts'
 import ThemeToggle from 'src/modules/header/views/ThemeToggle.tsx'
+import Language from 'src/modules/header/views/Language.tsx'
+import { useTranslation } from 'src/providers/TranslationProvider.tsx'
 
 const { Header } = Layout
 const { Title, Text } = Typography
@@ -21,6 +23,7 @@ const { Title, Text } = Typography
 const AppHeader = () => {
   const { signOut, getAuthUser } = useAuth()
   const navigate = useNavigate()
+  const { translate } = useTranslation()
   const user = getAuthUser()
   const isDoctor = user?.roles === undefined ? false : user.roles.includes(UserRole.DOCTOR)
   const { handleMenuClick, selectedKey, currentRoute } = useHeader({ signOut })
@@ -28,13 +31,13 @@ const AppHeader = () => {
   const menuItems = [
     {
       key: 'patients',
-      label: 'პაციენტები',
+      label: translate('patients', 'პაციენტები'),
       icon: <TeamOutlined />,
       className: currentRoute === '/' ? 'selected-menu-item' : ''
     },
     {
       key: 'logout',
-      label: 'გამოსვლა',
+      label: translate('logout', 'გამოსვლა'),
       icon: <LogoutOutlined />
     }
   ]
@@ -43,7 +46,7 @@ const AppHeader = () => {
     <Header className='flex justify-between items-center shadow-sm'>
       <div className='cursor-pointer' onClick={() => navigate('/')}>
         <Title level={4} className='mb-0 !text-amber-100'>
-            პაციენტების მენეჯმენტი
+          {translate('patients_management', 'პაციენტების მენეჯმენტი')}
         </Title>
       </div>
       <div className='flex items-center gap-4'>
@@ -70,6 +73,7 @@ const AppHeader = () => {
               </div>
             </div>
             <ThemeToggle />
+            <Language />
           </>
         )}
         <div className='hidden md:block'>

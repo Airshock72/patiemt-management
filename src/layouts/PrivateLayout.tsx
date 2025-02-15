@@ -4,10 +4,12 @@ import { useAuth } from 'src/providers/AuthProvider'
 import { Layout } from 'antd'
 import AppHeader from 'src/modules/header/views/IndexPage.tsx'
 import { Content, Footer } from 'antd/es/layout/layout'
+import { useTranslation } from 'src/providers/TranslationProvider.tsx'
 
 const PrivateLayout = (): ReactNode => {
   const auth = useAuth()
   const navigate = useNavigate()
+  const { translate } = useTranslation()
   useEffect(() => {
     const checkAuthUser = () => {
       const user = auth.getAuthUser()
@@ -22,7 +24,7 @@ const PrivateLayout = (): ReactNode => {
         <Outlet />
       </Content>
       <Footer className='text-center bg-white border-t border-gray-200 py-4 fixed bottom-0 w-full'>
-                © {new Date().getFullYear()} ჯანდაცვის სამინისტრო. ყველა უფლება დაცულია
+       © {new Date().getFullYear()} {translate('ministry_of_health', 'ჯანდაცვის სამინისტრო')}. {translate('all_rights_reserved', 'ყველა უფლება დაცულია')}
       </Footer>
     </Layout>
   )

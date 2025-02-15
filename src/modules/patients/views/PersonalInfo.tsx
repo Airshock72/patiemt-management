@@ -3,6 +3,7 @@ import usePatientPersonalInfo from 'src/modules/patients/hooks/usePatientPersona
 import { useParams } from 'react-router-dom'
 import { useAuth } from 'src/providers/AuthProvider.tsx'
 import { UserRole } from 'api/auth/types.ts'
+import { useTranslation } from 'src/providers/TranslationProvider.tsx'
 
 const { Option } = Select
 
@@ -26,6 +27,7 @@ const PersonalInfo = () => {
     state
   } = usePatientPersonalInfo({ id: patientId, isDoctor, form })
   const [otpForm] = Form.useForm()
+  const { translate } = useTranslation()
 
   return (
     <>
@@ -39,18 +41,18 @@ const PersonalInfo = () => {
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
-              label='სახელი'
+              label={translate('firstname', 'სახელი')}
               name='firstName'
-              rules={[{ required: true, message: 'გთხოვთ შეიყვანოთ სახელი!' }]}
+              rules={[{ required: true, message: `${translate('please_enter_firstname', 'გთხოვთ შეიყვანოთ სახელი')}!` }]}
             >
               <Input />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
-              label='გვარი'
+              label={translate('lastname', 'გვარი')}
               name='lastName'
-              rules={[{ required: true, message: 'გთხოვთ შეიყვანოთ გვარი!' }]}
+              rules={[{ required: true, message: `${translate('please_enter_lastname', 'გთხოვთ შეიყვანოთ გვარი')}!` }]}
             >
               <Input />
             </Form.Item>
@@ -59,25 +61,26 @@ const PersonalInfo = () => {
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
-              label='დაბადების თარიღი'
+              label={translate('birth_date', 'დაბადების თარიღი')}
               name='dob'
-              rules={[{ required: true, message: 'გთხოვთ შეიყვანოთ დაბადების თარიღი!' }]}
+              rules={[{ required: true, message: `${translate('please_enter_birth_date', 'გთხოვთ შეიყვანოთ დაბადების თარიღი')}!` }]}
             >
               <DatePicker style={{ width: '100%' }} />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
-              label='ქვეყანა'
+              label={translate('country', 'ქვეყანა')}
               name='country'
-              rules={[{ required: true, message: 'გთხოვთ შეიყვანოთ ქვეყნის დასახელება!' }]}
+              rules={[{ required: true, message: `${translate('please_enter_country_name', 'გთხოვთ შეიყვანოთ ქვეყნის დასახელება')}!` }]}
             >
               <Select>
-                <Option value='Georgia'>საქართველო</Option>
-                <Option value='USA'>აშშ</Option>
-                <Option value='Canada'>კანადა</Option>
-                <Option value='UK'>დიდი ბრიტანეთი</Option>
-                <Option value='Australia'>ავსტრალია</Option>
+                <Option value='Georgia'>{translate('georgia', 'საქართველო')}</Option>
+                <Option value='USA'>{translate('usa', 'აშშ')}</Option>
+                <Option value='Canada'>{translate('canada', 'კანადა')}</Option>
+                <Option value='UK'>{translate('great_britain', 'დიდი ბრიტანეთი')}</Option>
+                <Option value='Australia'>{translate('australia', 'ავსტრალია')}</Option>
+                <Option value='Spain'>{translate('spain', 'ესპანეთი')}</Option>
               </Select>
             </Form.Item>
           </Col>
@@ -85,26 +88,26 @@ const PersonalInfo = () => {
         <Row gutter={16}>
           <Col span={12}>
             <Form.Item
-              label='სქესი'
+              label={translate('gender', 'სქესი')}
               name='gender'
-              rules={[{ required: true, message: 'გთხოვთ აირჩიოთ სქესი!' }]}
+              rules={[{ required: true, message: `${translate('please_choose_gender', 'გთხოვთ აირჩიოთ სქესი')}!` }]}
             >
               <Select>
-                <Option value='male'>მამრობითი</Option>
-                <Option value='female'>მდედრობითი</Option>
-                <Option value='other'>სხვა</Option>
+                <Option value='male'>{translate('male', 'მამრობითი')}</Option>
+                <Option value='female'>{translate('female', 'მდედრობითი')}</Option>
+                <Option value='other'>{translate('other', 'სხვა')}</Option>
               </Select>
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item
-              label='ტელეფონის ნომერი'
+              label={translate('phone_number', 'ტელეფონის ნომერი')}
               name='phone'
               rules={[
-                { required: true, message: 'გთხოვთ შეიყვანოთ ტელეფონის ნომერი!' },
+                { required: true, message: `${translate('please_enter_phone_number', 'გთხოვთ შეიყვანოთ ტელეფონის ნომერი')}!` },
                 {
                   pattern: /^\d{9}$/,
-                  message: 'ტელეფონის ნომერი უნდა შედგებოდეს 9 ციფრისგან!'
+                  message: `${translate('phone_number_must_consist_9_digit', 'ტელეფონის ნომერი უნდა შედგებოდეს 9 ციფრისგან')}!`
                 }
               ]}
             >
@@ -117,7 +120,7 @@ const PersonalInfo = () => {
                     onClick={handleSendCode}
                     disabled={phoneNumber.length !== 9}
                   >
-                                    კოდის გაგზავნა
+                    {translate('send_code', 'კოდის გაგზავნა')}
                   </Button>
                 }
               />
@@ -132,24 +135,26 @@ const PersonalInfo = () => {
           onClick={() => form.submit()}
           disabled={patientId ? !isFormDirty : false}
         >
-                პაციენტის {patientId ? 'განახლება' : 'შენახვა'}
+          {translate('patient\'s', 'პაციენტის')} {patientId
+            ? translate('update', 'განახლება')
+            : translate('save', 'შენახვა')}
         </Button>
       </div>
       <Modal
-        title='OTP ვერიფიკაცია'
+        title={`OTP ${translate('verification', 'ვერიფიკაცია')}`}
         open={isModalVisible}
         onOk={() => handleOk()}
         onCancel={handleCancel}
       >
         <Form form={otpForm}>
           <Form.Item
-            label='OTP კოდი'
+            label={`OTP ${translate('code', 'კოდი')}`}
             name='otp'
             rules={[
-              { required: true, message: 'გთხოვთ შეიყვანოთ OTP კოდი!' },
+              { required: true, message: `${translate('please_enter_otp_code', 'გთხოვთ შეიყვანოთ OTP კოდი')}!` },
               {
                 pattern: /^\d{6}$/,
-                message: 'OTP უნდა შედგებოდეს 6 ციფრისგან!'
+                message: `${translate('otp_must_consist_6_digits', 'OTP უნდა შედგებოდეს 6 ციფრისგან')}!`
               }
             ]}
           >

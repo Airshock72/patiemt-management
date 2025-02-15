@@ -3,6 +3,7 @@ import '@ant-design/v5-patch-for-react-19'
 import { BrowserRouter } from 'react-router-dom'
 import { createRoot } from 'react-dom/client'
 import App from './App'
+import { ThemeProvider } from 'src/providers/ThemeContext.tsx'
 
 const createElement = document.createElement('div')
 createElement.className = 'flex flex-col flex-1'
@@ -14,6 +15,8 @@ const root = createRoot(domNode)
 
 root.render(
   <BrowserRouter>
-    <App />
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
   </BrowserRouter>
 )

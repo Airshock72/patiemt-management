@@ -22,8 +22,7 @@ const PrivateLayout = (): ReactNode => {
         <Outlet />
       </Content>
       <Footer className='text-center bg-white border-t border-gray-200 py-4 fixed bottom-0 w-full'>
-                © {new Date().getFullYear()} ჯანდაცვის სამინისტრო. ყველა უფლება
-                დაცულია
+                © {new Date().getFullYear()} ჯანდაცვის სამინისტრო. ყველა უფლება დაცულია
       </Footer>
     </Layout>
   )

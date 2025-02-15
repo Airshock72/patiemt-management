@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from 'src/providers/AuthProvider.tsx'
 import { UserRole } from 'api/auth/types.ts'
 import useHeader from 'src/modules/header/hooks/useHeader.ts'
+import ThemeToggle from 'src/modules/header/views/ThemeToggle.tsx'
 
 const { Header } = Layout
 const { Title, Text } = Typography
@@ -47,26 +48,29 @@ const AppHeader = () => {
       </div>
       <div className='flex items-center gap-4'>
         {user && (
-          <div className='flex items-center gap-2 mr-10'>
-            <Avatar
-              icon={<UserOutlined />}
-              src={user.avatar}
-              className='bg-blue-500'
-            />
-            <div className='flex flex-col'>
-              <Text strong className='!text-white'>
-                {user.username}
-              </Text>
-              {isDoctor && (
-                <Text
-                  type='secondary'
-                  className='text-xs !text-amber-100'
-                >
-                  {user.clinicName}
+          <>
+            <div className='flex items-center gap-2 mr-10'>
+              <Avatar
+                icon={<UserOutlined />}
+                src={user.avatar}
+                className='bg-blue-500'
+              />
+              <div className='flex flex-col'>
+                <Text strong className='!text-white'>
+                  {user.username}
                 </Text>
-              )}
+                {isDoctor && (
+                  <Text
+                    type='secondary'
+                    className='text-xs !text-amber-100'
+                  >
+                    {user.clinicName}
+                  </Text>
+                )}
+              </div>
             </div>
-          </div>
+            <ThemeToggle />
+          </>
         )}
         <div className='hidden md:block'>
           <Menu

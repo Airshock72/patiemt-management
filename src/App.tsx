@@ -5,6 +5,8 @@ import NotFound from 'src/modules/notFound/views/IndexPage.tsx'
 import { AuthProvider } from 'src/providers/AuthProvider.tsx'
 import PrivateLayout from 'src/layouts/PrivateLayout.tsx'
 import AccessDenied from 'src/modules/accessDenied/views/IndexPage.tsx'
+import { ConfigProvider, theme } from 'antd'
+import { useTheme } from 'src/providers/ThemeContext.tsx'
 
 const routesFromContext = (): Array<RouteType> => {
   const moduleRoutes: Array<RouteType> = []
@@ -20,17 +22,21 @@ const routesFromContext = (): Array<RouteType> => {
 export const routes = routesFromContext()
 
 const App = () => {
+  const { isDarkMode } = useTheme()
+
   return (
-    <AuthProvider>
-      <Routes>
-        <Route element={<PrivateLayout />}>
-          {routes.map((el, index) => <Route key={index} path={el.path} Component={el.element} />)}
-        </Route>
-        <Route path='/login' element={<LoginPage />} />
-        <Route path='/access-denied' element={<AccessDenied />} />
-        <Route path='*' element={<NotFound />} />
-      </Routes>
-    </AuthProvider>
+    <ConfigProvider theme={{ algorithm: isDarkMode ? theme.darkAlgorithm : theme.defaultAlgorithm }}>
+      <AuthProvider>
+        <Routes>
+          <Route element={<PrivateLayout />}>
+            {routes.map((el, index) => <Route key={index} path={el.path} Component={el.element} />)}
+          </Route>
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/access-denied' element={<AccessDenied />} />
+          <Route path='*' element={<NotFound />} />
+        </Routes>
+      </AuthProvider>
+    </ConfigProvider>
   )
 }
 

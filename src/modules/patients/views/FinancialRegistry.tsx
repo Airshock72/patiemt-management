@@ -1,5 +1,5 @@
 import { Table, Button } from 'antd'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import useFinancialRegistry from 'src/modules/patients/hooks/useFinancialRegistry.ts'
 import { useAuth } from 'src/providers/AuthProvider.tsx'
 import { UserRole } from 'api/auth/types.ts'
@@ -12,13 +12,12 @@ const FinancialRegistry = () => {
   const { getAuthUser } = useAuth()
   const user = getAuthUser()
   const isDoctor = user && user.roles === undefined ? false : user?.roles.includes(UserRole.DOCTOR)
-  const { state } = useFinancialRegistry({ patientId, isDoctor })
-  const navigate = useNavigate()
+  const isAdminOrDoctor = user && user.roles === undefined
+    ? false
+    : user?.roles.includes(UserRole.ADMIN) || user?.roles?.includes(UserRole.DOCTOR)
+  const { state, handleFinish } = useFinancialRegistry({ patientId, isDoctor, isAdminOrDoctor })
   const { translate } = useTranslation()
 
-  const handleFinish = () => {
-    navigate('/')
-  }
 
   return (
     <div>

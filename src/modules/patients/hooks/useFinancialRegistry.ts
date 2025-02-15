@@ -7,16 +7,17 @@ import { useNavigate } from 'react-router-dom'
 interface UseFinancialRegistryProps {
   patientId?: ID
   isDoctor?: boolean
+  isAdminOrDoctor?: boolean
 }
 
 interface UseFinancialRegistry {
   state: FinancialRegistryStore
+  handleFinish: () => void
 }
 
-const useFinancialRegistry = ({ patientId, isDoctor }: UseFinancialRegistryProps): UseFinancialRegistry => {
+const useFinancialRegistry = ({ patientId, isDoctor, isAdminOrDoctor }: UseFinancialRegistryProps): UseFinancialRegistry => {
   const [state, dispatch] = useFinancialRegistryReducer()
   const navigate = useNavigate()
-
 
   const getFinancialRegistry = (id: ID) => {
     dispatch({ type: 'SEND_FINANCIAL_REGISTRY_REQUEST' })
@@ -24,12 +25,23 @@ const useFinancialRegistry = ({ patientId, isDoctor }: UseFinancialRegistryProps
     dispatch({ type: 'DONE_FINANCIAL_REGISTRY_REQUEST', payload: financialRegistry })
   }
 
+  const handleFinish = () => navigate('/')
+
   useEffect(() => {
-    if (patientId) getFinancialRegistry(patientId)
-    if (!isDoctor) navigate('/access-denied')
+    if (!isAdminOrDoctor) {
+      navigate('/access-denied')
+      return
+    }
+    if (patientId) {
+      getFinancialRegistry(patientId)
+      return
+    }
+    if (!isDoctor) {
+      navigate('/access-denied')
+    }
   }, [patientId])
 
-  return { state }
+  return { state, handleFinish }
 }
 
 export default useFinancialRegistry

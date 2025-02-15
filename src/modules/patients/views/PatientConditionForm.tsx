@@ -16,12 +16,15 @@ const PatientConditionForm = () => {
   const user = getAuthUser()
   const { translate } = useTranslation()
   const isDoctor = user && user.roles === undefined ? false : user?.roles.includes(UserRole.DOCTOR)
+  const isAdminOrDoctor = user && user.roles === undefined
+    ? false
+    : user?.roles.includes(UserRole.ADMIN) || user?.roles?.includes(UserRole.DOCTOR)
   const {
     state,
     isFormDirty,
     onFieldsChange,
     onFinish
-  } = usePatientCondition({ id: patientId, isDoctor, form })
+  } = usePatientCondition({ id: patientId, isDoctor, form, isAdminOrDoctor })
 
   return (
     <Form

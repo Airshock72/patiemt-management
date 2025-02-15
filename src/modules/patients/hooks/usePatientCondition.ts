@@ -22,9 +22,10 @@ interface UsePatientConditionProps {
   form: FormInstance<PatientConditionFormValues>
   id?: ID
   isDoctor?: boolean
+  isAdminOrDoctor?: boolean
 }
 
-const usePatientCondition = ({ id, isDoctor, form }: UsePatientConditionProps): UsePatientCondition => {
+const usePatientCondition = ({ id, isDoctor, form, isAdminOrDoctor }: UsePatientConditionProps): UsePatientCondition => {
   const [state, dispatch] = usePatientConditionReducer()
   const navigate = useNavigate()
   const [isFormDirty, setIsFormDirty] = useState(false)
@@ -61,8 +62,17 @@ const usePatientCondition = ({ id, isDoctor, form }: UsePatientConditionProps): 
   }
 
   useEffect(() => {
-    if (id) getPatientCondition(id)
-    if (!isDoctor) navigate('/access-denied')
+    if (!isAdminOrDoctor) {
+      navigate('/access-denied')
+      return
+    }
+    if (id) {
+      getPatientCondition(id)
+      return
+    }
+    if (!isDoctor) {
+      navigate('/access-denied')
+    }
   }, [id])
 
   useEffect(() => {

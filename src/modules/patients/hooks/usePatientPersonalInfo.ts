@@ -25,9 +25,10 @@ interface UsePatientProps {
   otpForm: FormInstance<{ otp: string }>
   id?: ID
   isDoctor?: boolean
+  isAdminOrDoctor?: boolean
 }
 
-const usePatientPersonalInfo = ({ id, isDoctor, form, otpForm }: UsePatientProps): UsePatientPersonalInfo => {
+const usePatientPersonalInfo = ({ id, isDoctor, form, otpForm, isAdminOrDoctor }: UsePatientProps): UsePatientPersonalInfo => {
   const [state, dispatch] = usePatientReducer()
   const navigate = useNavigate()
   const [phoneNumber, setPhoneNumber] = useState('')
@@ -112,8 +113,17 @@ const usePatientPersonalInfo = ({ id, isDoctor, form, otpForm }: UsePatientProps
   }, [form])
 
   useEffect(() => {
-    if (id) getPatient(id)
-    if (!isDoctor) navigate('/access-denied')
+    if (!isAdminOrDoctor) {
+      navigate('/access-denied')
+      return
+    }
+    if (id) {
+      getPatient(id)
+      return
+    }
+    if (!isDoctor) {
+      navigate('/access-denied')
+    }
   }, [id])
 
   return {

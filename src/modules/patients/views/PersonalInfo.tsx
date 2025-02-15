@@ -14,6 +14,9 @@ const PersonalInfo = () => {
   const { getAuthUser } = useAuth()
   const user = getAuthUser()
   const isDoctor = user && user.roles === undefined ? false : user?.roles.includes(UserRole.DOCTOR)
+  const isAdminOrDoctor = user && user.roles === undefined
+    ? false
+    : user?.roles.includes(UserRole.ADMIN) || user?.roles?.includes(UserRole.DOCTOR)
   const [otpForm] = Form.useForm()
   const {
     onFinish,
@@ -26,7 +29,7 @@ const PersonalInfo = () => {
     isFormDirty,
     phoneNumber,
     state
-  } = usePatientPersonalInfo({ id: patientId, isDoctor, form, otpForm })
+  } = usePatientPersonalInfo({ id: patientId, isDoctor, form, otpForm, isAdminOrDoctor })
   const { translate } = useTranslation()
 
   return (

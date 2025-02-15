@@ -5,19 +5,24 @@ import { Navigate } from 'react-router-dom'
 import { LoginFormValue } from 'src/modules/auth/login/types'
 import { UserRole } from 'api/auth/types.ts'
 import { useTranslation } from 'src/providers/TranslationProvider.tsx'
+import { useTheme } from 'src/providers/ThemeContext.tsx'
+import { darkThemeStyles, lightThemeStyles } from 'src/modules/auth/login/helpers'
 
 const LoginPage = () => {
   const auth = useAuth()
   const [form] = Form.useForm()
   const { translate } = useTranslation()
+  const { isDarkMode } = useTheme()
 
-  const onFinish = (values: LoginFormValue) =>  auth.signin(values)
+  const onFinish = (values: LoginFormValue) => auth.signin(values)
 
   if (localStorage.getItem('userData') !== null) return <Navigate to='/' />
 
+  const pageStyle = isDarkMode ? darkThemeStyles : lightThemeStyles
+
   return (
     <div className='flex items-center justify-center !min-h-screen bg-gradient-to-r from-blue-400 via-purple-500 to-pink-600'>
-      <div className='w-full max-w-md p-8 bg-white rounded-lg shadow-2xl'>
+      <div className='w-full max-w-md p-8 rounded-lg shadow-2xl' style={pageStyle}>
         <h1 className='text-2xl font-bold text-center mb-6'>{translate('authorization', 'ავტორიზაცია')}</h1>
         <Form form={form} onFinish={onFinish} layout='vertical'>
           <Form.Item

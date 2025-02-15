@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react'
 import { FilterFormValues } from 'src/modules/patients/types'
 import dayjs from 'dayjs'
-import { FormInstance, Modal, notification } from 'antd'
+import { FormInstance } from 'antd'
 import { PatientsStore, usePatientsReducer } from 'src/modules/patients/store/patients.ts'
 import { PatientsApi } from '../../../api'
 import { Patient } from 'api/patients/types.ts'
+import useApp from 'antd/es/app/useApp'
 
 interface UsePatients {
   state: PatientsStore
   onFinish: (values: FilterFormValues) => void
-  handleDelete: (record: Patient) => void
+  handleDelete: (record: Patient, translate: (key: string, defaultValue: string) => string) => void
 }
 
 interface UsePatientsProps {
@@ -19,6 +20,7 @@ interface UsePatientsProps {
 const usePatients = ({ form }: UsePatientsProps): UsePatients => {
   const [, setFilterValues] = useState<FilterFormValues>({})
   const [state, dispatch] = usePatientsReducer()
+  const { modal, notification } = useApp()
 
   const getPatients = (filters: FilterFormValues) => {
     dispatch({ type: 'SEND_PATIENTS_REQUEST' })
@@ -27,27 +29,22 @@ const usePatients = ({ form }: UsePatientsProps): UsePatients => {
     dispatch({ type: 'DONE_PATIENTS_REQUEST', payload: filteredPatients })
   }
 
-  const handleDelete = (record: Patient) => {
-    Modal.confirm({
-      title: 'დარწმუნებული ხართ რომ წაშალოთ ეს ჩანაწერი?',
-      content: 'პროცესს უკან ვერ დააბრუნებთ.',
-      okText: 'დიახ',
+  const handleDelete = (record: Patient, translate: (key: string, defaultValue: string) => string) => {
+    modal.confirm({
+      title: `${translate('are_you_sure_delete_this_entry', 'დარწმუნებული ხართ რომ წაშალოთ ეს ჩანაწერი')}?`,
+      content: `${translate('you_can_not_reverse_the_process', 'პროცესს უკან ვერ დააბრუნებთ')}.`,
+      okText: translate('yes', 'დიახ'),
       okType: 'danger',
-      cancelText: 'არა',
-      onOk() { onDelete(record.key) }
+      cancelText: translate('no', 'არა'),
+      onOk() { onDelete(record.key, translate) }
     })
   }
 
-  const onDelete = (key: string) => {
+  const onDelete = (key: string, translate: (key: string, defaultValue: string) => string) => {
     const patients = PatientsApi.deletePatient(key)
     dispatch({ type: 'DELETE_PATIENT', payload: patients })
     notification.success({
-      message: 'პაციენტის მონაცემები წაიშალა წარმატებით!',
-      style: {
-        backgroundColor: '#f6ffed',
-        border: '1px solid #b7eb8f',
-        color: '#389e0d'
-      }
+      message: `${translate('patient_data_deleted_successfully', 'პაციენტის მონაცემები წაიშალა წარმატებით')}!`
     })
   }
 

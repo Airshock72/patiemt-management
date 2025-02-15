@@ -25,7 +25,7 @@ const PatientConditionForm = () => {
 
   return (
     <Form
-      onFinish={values => onFinish(values)}
+      onFinish={values => onFinish(values, translate)}
       layout='vertical'
       form={form}
       initialValues={state.data}

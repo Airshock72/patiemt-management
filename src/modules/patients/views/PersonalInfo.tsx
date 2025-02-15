@@ -36,7 +36,7 @@ const PersonalInfo = () => {
     <>
       <Form
         form={form}
-        onFinish={values => onFinish(values)}
+        onFinish={values => onFinish(values, translate)}
         layout='vertical'
         initialValues={state.data}
         onFieldsChange={() => onFieldsChange()}

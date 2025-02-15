@@ -85,5 +85,16 @@
   "update": "Update",
   "code": "Code",
   "please_enter_otp_code": "Please enter OTP code",
-  "otp_must_consist_6_digits": "OTP must consist of 6 digits."
+  "otp_must_consist_6_digits": "OTP must consist of 6 digits.",
+  "please_complete_otp_verification": "Please complete OTP verification",
+  "patient_data": "Patient data",
+  "updated": "Updated",
+  "saved": "Saved",
+  "successfully": "Successfully",
+  "patient_condition_updated_successfully": "The patient's condition has been successfully updated",
+  "are_you_sure_delete_this_entry": "Are you sure you want to delete this entry",
+  "you_can_not_reverse_the_process": "You can't reverse the process",
+  "yes": "Yes",
+  "no": "No",
+  "patient_data_deleted_successfully": "Patient data deleted successfully"
 }

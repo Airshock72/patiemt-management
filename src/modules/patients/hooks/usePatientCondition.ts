@@ -15,7 +15,7 @@ interface UsePatientCondition {
           & ((allFieldsTouched?: boolean) => boolean)
   ) => void
   isFormDirty: boolean
-  onFinish: (values: PatientConditionFormValues) => void
+  onFinish: (values: PatientConditionFormValues, translate: (key: string, defaultValue: string) => string) => void
 }
 
 interface UsePatientConditionProps {
@@ -50,18 +50,13 @@ const usePatientCondition = ({ id, isDoctor, form }: UsePatientConditionProps): 
     setIsFormDirty(fieldsTouched)
   }
 
-  const onFinish = (values: PatientConditionFormValues) => {
+  const onFinish = (values: PatientConditionFormValues, translate: (key: string, defaultValue: string) => string) => {
     if (id) {
       const updatedValues = updatePatientCondition(values, id)
       form.setFieldsValue(updatedValues)
     }
     notification.success({
-      message: 'პაციენტის მდგომარეობა წარმატებით!',
-      style: {
-        backgroundColor: '#f6ffed',
-        border: '1px solid #b7eb8f',
-        color: '#389e0d'
-      }
+      message: `${translate('patient_condition_updated_successfully', 'პაციენტის მდგომარეობა წარმატებით განახლდა')}!`
     })
   }
 

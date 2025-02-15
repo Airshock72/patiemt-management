@@ -50,7 +50,7 @@ const PatientPage = () => {
                     title={translate('delete', 'წაშლა')}
                     danger
                     icon={<DeleteOutlined />}
-                    handleClick={() => handleDelete(record)}
+                    handleClick={() => handleDelete(record, translate)}
                     className='delete-button'
                   />
                 )

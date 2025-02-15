@@ -5,7 +5,7 @@ import { PatientStore, usePatientReducer } from 'src/modules/patients/store/pati
 import { ID } from 'api/types/apiGlobalTypes.ts'
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { FormInstance } from 'antd/es/form/hooks/useForm'
-import { notification } from 'antd'
+import useApp from 'antd/es/app/useApp'
 
 interface UsePatientPersonalInfo {
   state: PatientStore
@@ -17,7 +17,7 @@ interface UsePatientPersonalInfo {
   handleCancel: () => void
   onFieldsChange: () => void
   handleOk: () => void
-  onFinish: (values: PatientFormValues) => void
+  onFinish: (values: PatientFormValues, translate:  (key: string, defaultValue: string) => string) => void
 }
 
 interface UsePatientProps {
@@ -35,6 +35,7 @@ const usePatientPersonalInfo = ({ id, isDoctor, form, otpForm, isAdminOrDoctor }
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [isOtpValidated, setIsOtpValidated] = useState(false)
   const [isFormDirty, setIsFormDirty] = useState(false)
+  const { notification } = useApp()
 
   const getPatient = (patientId: ID) => {
     dispatch({ type: 'SEND_PATIENT_REQUEST' })
@@ -60,23 +61,20 @@ const usePatientPersonalInfo = ({ id, isDoctor, form, otpForm, isAdminOrDoctor }
     setIsModalVisible(true)
   }
 
-  const onFinish = (values: PatientFormValues) => {
+  const onFinish = (values: PatientFormValues, translate: (key: string, defaultValue: string) => string) => {
     if (!isOtpValidated && !id) {
       form.setFields([
         {
           name: 'phone',
-          errors: ['გთხოვთ დაასრულოთ OTP ვერიფიკაცია!']
+          errors: [`${translate('please_complete_otp_verification', 'გთხოვთ დაასრულოთ OTP ვერიფიკაცია')}!`]
         }
       ])
       return
     }
     notification.success({
-      message: `პაციენტის მონაცემები ${id ? 'განახლდა' : 'შეინახა '} წარმატებით!`,
-      style: {
-        backgroundColor: '#f6ffed',
-        border: '1px solid #b7eb8f',
-        color: '#389e0d'
-      }
+      message: `${translate('patient_data', 'პაციენტის მონაცემები')} ${id
+        ? translate('updated', 'განახლდა')
+        : translate('saved', 'შეინახა')} ${translate('successfully', 'წარმატებით')}!`
     })
     return id ? updatePatient(values, id) : createPatient(values)
   }

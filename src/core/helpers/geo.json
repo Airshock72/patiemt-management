@@ -85,5 +85,16 @@
   "update": "განახლება",
   "code": "კოდი",
   "please_enter_otp_code": "გთხოვთ შეიყვანოთ OTP კოდი",
-  "otp_must_consist_6_digits": "OTP უნდა შედგებოდეს 6 ციფრისგან"
+  "otp_must_consist_6_digits": "OTP უნდა შედგებოდეს 6 ციფრისგან",
+  "please_complete_otp_verification": "გთხოვთ დაასრულოთ OTP ვერიფიკაცია",
+  "patient_data": "პაციენტის მონაცემები",
+  "updated": "განახლდა",
+  "saved": "შეინახა",
+  "successfully": "წარმატებით",
+  "patient_condition_updated_successfully": "პაციენტის მდგომარეობა წარმატებით განახლდა",
+  "are_you_sure_delete_this_entry": "დარწმუნებული ხართ რომ წაშალოთ ეს ჩანაწერი",
+  "you_can_not_reverse_the_process": "პროცესს უკან ვერ დააბრუნებთ",
+  "yes": "დიახ",
+  "no": "არა",
+  "patient_data_deleted_successfully": "პაციენტის მონაცემები წაიშალა წარმატებით"
 }

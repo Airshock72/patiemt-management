@@ -1,0 +1,6 @@
+*
+
+!static/
+!static/**
+!.gitignore
+!.htaccess

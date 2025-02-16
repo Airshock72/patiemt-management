@@ -81,7 +81,10 @@ const usePatients = ({ form }: UsePatientsProps): UsePatients => {
     })
   }
 
-  const handleClearFilters = () => form.resetFields()
+  const handleClearFilters = () => {
+    form.resetFields()
+    getPatients({})
+  }
 
   const saveFilters = (values: FilterFormValues) => {
     localStorage.setItem('patientFilters', JSON.stringify(values))

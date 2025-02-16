@@ -15,7 +15,7 @@ const domNode = document.getElementById('root') as HTMLDivElement
 const root = createRoot(domNode)
 
 root.render(
-  <BrowserRouter>
+  <BrowserRouter basename='/patient-management'>
     <ThemeProvider>
       <TranslationProvider>
         <Application />

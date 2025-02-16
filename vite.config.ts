@@ -8,6 +8,6 @@ export default defineConfig({
     react(),
     tsconfigPaths(),
     tailwindcss()
-  ],
-  base: '/patient-management/'
+  ]
+  // base: '/patient-management/'
 })

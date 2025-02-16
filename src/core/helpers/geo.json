@@ -96,5 +96,6 @@
   "you_can_not_reverse_the_process": "პროცესს უკან ვერ დააბრუნებთ",
   "yes": "დიახ",
   "no": "არა",
-  "patient_data_deleted_successfully": "პაციენტის მონაცემები წაიშალა წარმატებით"
+  "patient_data_deleted_successfully": "პაციენტის მონაცემები წაიშალა წარმატებით",
+  "clear_filter": "გაასუფთავეთ ფილტრი"
 }

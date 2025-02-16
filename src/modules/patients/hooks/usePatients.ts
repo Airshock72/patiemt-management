@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { FilterFormValues } from 'src/modules/patients/types'
 import dayjs from 'dayjs'
-import { FormInstance } from 'antd'
+import { Form, FormInstance } from 'antd'
 import { PatientsStore, usePatientsReducer } from 'src/modules/patients/store/patients.ts'
 import { PatientsApi } from '../../../api'
 import { Patient } from 'api/patients/types.ts'
@@ -11,6 +11,8 @@ interface UsePatients {
   state: PatientsStore
   onFinish: (values: FilterFormValues) => void
   handleDelete: (record: Patient, translate: (key: string, defaultValue: string) => string) => void
+  handleClearFilters: () => void
+  isFilterActive: boolean
 }
 
 interface UsePatientsProps {
@@ -21,6 +23,8 @@ const usePatients = ({ form }: UsePatientsProps): UsePatients => {
   const [, setFilterValues] = useState<FilterFormValues>({})
   const [state, dispatch] = usePatientsReducer()
   const { modal, notification } = useApp()
+  const [isFilterActive, setIsFilterActive] = useState(false)
+  const formValues = Form.useWatch([], form)
 
   const getPatients = (filters: FilterFormValues) => {
     dispatch({ type: 'SEND_PATIENTS_REQUEST' })
@@ -59,9 +63,7 @@ const usePatients = ({ form }: UsePatientsProps): UsePatients => {
             (Array.isArray(value) && value.length === 0)
     )
 
-    if (isAllFiltersEmpty) {
-      return patients
-    }
+    if (isAllFiltersEmpty) return patients
 
     return patients.filter((patient) => {
       return (
@@ -78,6 +80,8 @@ const usePatients = ({ form }: UsePatientsProps): UsePatients => {
       )
     })
   }
+
+  const handleClearFilters = () => form.resetFields()
 
   const saveFilters = (values: FilterFormValues) => {
     localStorage.setItem('patientFilters', JSON.stringify(values))
@@ -109,7 +113,14 @@ const usePatients = ({ form }: UsePatientsProps): UsePatients => {
     }
   }, [form])
 
-  return { state, onFinish, handleDelete }
+  useEffect(() => {
+    const isActive = Object.values(formValues || {}).some(
+      (value) => value !== undefined && value !== '' && value !== null
+    )
+    setIsFilterActive(isActive)
+  }, [formValues])
+
+  return { state, onFinish, handleDelete, handleClearFilters, isFilterActive }
 }
 
 export default usePatients

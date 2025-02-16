@@ -96,5 +96,6 @@
   "you_can_not_reverse_the_process": "You can't reverse the process",
   "yes": "Yes",
   "no": "No",
-  "patient_data_deleted_successfully": "Patient data deleted successfully"
+  "patient_data_deleted_successfully": "Patient data deleted successfully",
+  "clear_filter": "Clear filter"
 }

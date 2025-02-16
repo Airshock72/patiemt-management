@@ -20,12 +20,17 @@ const PatientPage = () => {
     : user?.roles.includes(UserRole.ADMIN) || user?.roles?.includes(UserRole.DOCTOR)
   const isDoctor = user && user.roles === undefined ? false : user?.roles.includes(UserRole.DOCTOR)
   const [form] = Form.useForm<FilterFormValues>()
-  const { state, onFinish, handleDelete } = usePatients({ form })
+  const { state, onFinish, handleDelete, handleClearFilters, isFilterActive } = usePatients({ form })
   const navigate = useNavigate()
 
   return (
     <div className='p-4'>
-      <Filters form={form} onFinish={onFinish} />
+      <Filters
+        form={form}
+        onFinish={onFinish}
+        handleClearFilters={handleClearFilters}
+        isFilterActive={isFilterActive}
+      />
       <Table
         columns={[
           ...patientColumns(translate),

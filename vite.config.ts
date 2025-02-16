@@ -9,5 +9,16 @@ export default defineConfig({
     tsconfigPaths(),
     tailwindcss()
   ],
+  build: {
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ['react', 'react-dom'],
+          antd: ['antd']
+        }
+      }
+    }
+  },
   base: '/patient-management/'
 })

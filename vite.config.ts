@@ -20,5 +20,5 @@ export default defineConfig({
       }
     }
   },
-  base: '/patient-management/'
+  base: '/patient-management'
 })

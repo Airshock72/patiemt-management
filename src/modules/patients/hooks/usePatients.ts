@@ -82,6 +82,7 @@ const usePatients = ({ form }: UsePatientsProps): UsePatients => {
   }
 
   const handleClearFilters = () => {
+    localStorage.removeItem('patientFilters')
     form.resetFields()
     getPatients({})
   }
